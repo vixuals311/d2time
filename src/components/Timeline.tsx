@@ -399,7 +399,7 @@ export function Timeline() {
         <div className="mb-8 border-b-2 border-[#1A202C] pb-6">
           <div className="flex justify-between items-start">
             <div>
-              <h1 className="text-3xl font-bold uppercase tracking-tighter mb-1">Daily Schedule</h1>
+              <h1 className="text-3xl font-bold uppercase tracking-tighter mb-1">Executive Schedule</h1>
               <p className="text-lg text-[#4A5568]">{format(parseISO(selectedDate), "EEEE, MMMM do, yyyy")}</p>
             </div>
             <div className="text-right">
