@@ -39,9 +39,9 @@ export function SharePanel() {
   };
 
   return (
-    <Dialog onOpenChange={(open) => {
-      // Ensure the toast from a previous print attempt is dismissed when re-opening
-      if (open) toast.dismiss("pdf-gen");
+    <Dialog open={open} onOpenChange={(val) => {
+      setOpen(val);
+      if (val) toast.dismiss("pdf-gen");
     }}>
       <DialogTrigger asChild>
         <button className="flex items-center gap-2 rounded-2xl bg-white px-5 py-2.5 text-sm font-semibold text-[#4A5568] shadow-[0_2px_10px_-2px_rgba(0,0,0,0.05)] border border-[#EDF2F7] hover:bg-[#F7FAFC] transition-all">
