@@ -300,12 +300,12 @@ export function Timeline() {
 
   if (events.length === 0) {
     return (
-      <div className="flex h-80 flex-col items-center justify-center rounded-[3rem] border-2 border-dashed border-[#EDF2F7] bg-white/40 backdrop-blur-md shadow-inner">
-        <div className="rounded-[2rem] bg-white p-8 mb-6 shadow-xl shadow-gray-100/50 animate-float">
-          <Clock className="h-10 w-10 text-[#2D3748]" />
+      <div className="flex h-80 flex-col items-center justify-center rounded-[2rem] border-2 border-dashed border-[#EDF2F7] bg-white shadow-sm">
+        <div className="rounded-2xl bg-[#F7FAFC] p-6 mb-4 shadow-sm">
+          <Clock className="h-8 w-8 text-[#A0AEC0]" />
         </div>
-        <p className="text-[#1A202C] text-lg font-medium tracking-tight">Timeline is clear</p>
-        <p className="text-sm text-[#A0AEC0] mt-2 font-light">No events scheduled for this day</p>
+        <p className="text-[#1A202C] text-xl font-bold tracking-tight">Timeline is clear</p>
+        <p className="text-sm text-[#718096] mt-1">No events scheduled for this day</p>
       </div>
     );
   }
