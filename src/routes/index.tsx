@@ -26,22 +26,25 @@ function Index() {
   const handleToday = () => setSelectedDate(new Date());
 
   return (
-    <div className="min-h-screen bg-[#F8F9FB] px-6 py-8 md:px-12 md:py-12 font-sans selection:bg-[#EBF8FF]">
+    <div className="min-h-screen bg-[#F8F9FB] px-6 py-8 md:px-12 md:py-16 font-sans selection:bg-[#EBF8FF]">
       <Toaster position="top-center" richColors />
       
-      <header className="mx-auto max-w-3xl mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <div className="h-8 w-8 rounded-xl bg-[#2D3748] flex items-center justify-center text-white">
-              <CalendarIcon className="h-4 w-4" />
+      <header className="mx-auto max-w-4xl mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
+        <div className="flex-1">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="h-10 w-10 rounded-2xl bg-[#2D3748] flex items-center justify-center text-white shadow-lg shadow-gray-200/50 animate-float">
+              <CalendarIcon className="h-5 w-5" />
             </div>
-            <span className="text-xs font-bold uppercase tracking-widest text-[#A0AEC0]">PA Assistant</span>
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#A0AEC0] block leading-none mb-1">Executive Suite</span>
+              <span className="text-xs font-semibold text-[#4A5568]">Personal Assistant v2.0</span>
+            </div>
           </div>
-          <h1 className="text-4xl font-serif font-medium text-[#1A202C] tracking-tight print:hidden">Timeline</h1>
+          <h1 className="text-5xl font-serif font-medium text-[#1A202C] tracking-tight print:hidden text-gradient">Timeline</h1>
           <h1 className="hidden print:block text-4xl font-serif font-medium text-[#1A202C] tracking-tight">Executive Schedule</h1>
 
-          <div className="flex items-center gap-3 mt-1">
-            <p className="text-[#718096] text-lg">{format(currentSelectedDate, "EEEE, MMMM do")}</p>
+          <div className="flex items-center gap-4 mt-3">
+            <p className="text-[#718096] text-xl font-light">{format(currentSelectedDate, "EEEE, MMMM do")}</p>
             <div className="flex items-center bg-white border border-[#EDF2F7] rounded-lg shadow-sm px-1 py-0.5 print:hidden">
               <button 
                 onClick={handlePrevDay}
@@ -100,15 +103,19 @@ function Index() {
 
       </header>
 
-      <main className="mx-auto max-w-3xl">
+      <main className="mx-auto max-w-4xl">
         <Timeline />
       </main>
 
-      <footer className="mx-auto max-w-3xl mt-20 pt-8 border-t border-[#EDF2F7] flex justify-between items-center text-[11px] font-medium text-[#A0AEC0] uppercase tracking-widest print:hidden">
-        <span>&copy; 2026 Executive PA Suite</span>
-        <div className="flex gap-6">
-          <button className="hover:text-[#4A5568] transition-colors">Privacy</button>
-          <button className="hover:text-[#4A5568] transition-colors">Support</button>
+      <footer className="mx-auto max-w-4xl mt-32 pb-12 pt-8 border-t border-[#EDF2F7] flex flex-col md:flex-row gap-6 justify-between items-center text-[10px] font-bold text-[#A0AEC0] uppercase tracking-[0.2em] print:hidden">
+        <div className="flex items-center gap-2">
+          <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
+          <span>System Active &bull; &copy; 2026</span>
+        </div>
+        <div className="flex gap-8">
+          <button className="hover:text-[#2D3748] transition-colors">Security</button>
+          <button className="hover:text-[#2D3748] transition-colors">Terms</button>
+          <button className="hover:text-[#2D3748] transition-colors">Support</button>
         </div>
       </footer>
     </div>

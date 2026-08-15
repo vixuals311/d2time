@@ -112,7 +112,7 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
 
           <div
             className={cn(
-              "relative flex items-center gap-3 md:gap-4 rounded-xl md:rounded-2xl bg-white p-3 md:p-5 shadow-[0_2px_12px_-2px_rgba(0,0,0,0.04)] md:shadow-[0_4px_20px_-2px_rgba(0,0,0,0.05)] border border-transparent hover:border-[#E2E8F0] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)] transition-all",
+              "relative flex items-center gap-3 md:gap-5 rounded-2xl md:rounded-[2rem] bg-white p-4 md:p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] border border-transparent hover:border-[#E2E8F0] hover:shadow-[0_20px_40px_-8px_rgba(0,0,0,0.06)] transition-all duration-500",
             )}
           >
             <button
@@ -127,10 +127,10 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
               <div className="flex items-center justify-between mb-1.5 md:mb-2">
                 <div className="flex items-center gap-2">
                   <span className={cn(
-                    "rounded-full px-2 md:px-2.5 py-0.5 text-[8px] md:text-[10px] font-bold uppercase tracking-wider border flex items-center gap-1",
+                    "rounded-full px-3 py-1 text-[9px] font-bold uppercase tracking-[0.15em] border flex items-center gap-1.5 shadow-sm",
                     typeStyles[event.type]
                   )}>
-                    <Icon className="h-2.5 w-2.5 md:h-3 md:w-3" />
+                    <Icon className="h-3 w-3" />
                     {event.type}
                   </span>
                 </div>
@@ -326,12 +326,12 @@ export function Timeline() {
 
   if (events.length === 0) {
     return (
-      <div className="flex h-64 flex-col items-center justify-center rounded-[2rem] border-2 border-dashed border-[#E2E8F0] bg-white/50 backdrop-blur-sm">
-        <div className="rounded-full bg-[#EDF2F7] p-4 mb-4">
-          <Clock className="h-8 w-8 text-[#A0AEC0]" />
+      <div className="flex h-80 flex-col items-center justify-center rounded-[3rem] border-2 border-dashed border-[#EDF2F7] bg-white/40 backdrop-blur-md shadow-inner">
+        <div className="rounded-[2rem] bg-white p-8 mb-6 shadow-xl shadow-gray-100/50 animate-float">
+          <Clock className="h-10 w-10 text-[#2D3748]" />
         </div>
-        <p className="text-[#718096] font-medium">Your timeline is empty</p>
-        <p className="text-sm text-[#A0AEC0] mt-1">Start by adding an event above</p>
+        <p className="text-[#1A202C] text-lg font-medium tracking-tight">Timeline is clear</p>
+        <p className="text-sm text-[#A0AEC0] mt-2 font-light">No events scheduled for this day</p>
       </div>
     );
   }
@@ -346,8 +346,8 @@ export function Timeline() {
     >
       <SortableContext items={events.map((e) => e.id)} strategy={verticalListSortingStrategy}>
         <div className="relative pl-0 md:pl-4 pb-12">
-          {/* Vertical line - responsive offset */}
-          <div className="absolute left-[81px] md:left-[95px] top-4 bottom-4 w-[2px] bg-[#EDF2F7] -z-10" />
+          {/* Vertical line - premium gradient */}
+          <div className="absolute left-[81px] md:left-[95px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-[#EDF2F7] via-[#CBD5E0] to-[#EDF2F7] -z-10 opacity-50" />
           
           {events.map((event, index) => {
             const startTime = new Date(event.startTime);
@@ -357,10 +357,10 @@ export function Timeline() {
             return (
               <div key={event.id} className="relative">
                 {isNow && (
-                  <div className="absolute left-0 right-0 -top-6 flex items-center gap-3 z-20 print:hidden animate-pulse">
-                     <div className="w-12 md:w-16 text-right text-[8px] md:text-[10px] font-bold text-[#E53E3E] uppercase tracking-tighter">Now</div>
-                     <div className="h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-[#E53E3E]" />
-                     <div className="h-[1px] flex-1 bg-[#E53E3E]" />
+                  <div className="absolute left-0 right-0 -top-8 flex items-center gap-4 z-20 print:hidden">
+                     <div className="w-12 md:w-16 text-right text-[9px] font-bold text-[#E53E3E] uppercase tracking-[0.2em] animate-pulse">Now</div>
+                     <div className="h-2 w-2 rounded-full bg-[#E53E3E] shadow-[0_0_10px_rgba(229,62,62,0.5)] animate-pulse" />
+                     <div className="h-[1px] flex-1 bg-gradient-to-r from-[#E53E3E] to-transparent opacity-20" />
                   </div>
                 )}
                 <SortableEventItem event={event} bufferMinutes={bufferMinutes} index={index} />
@@ -375,9 +375,9 @@ export function Timeline() {
                 <div className="absolute -left-[25px] md:-left-[39px] top-1/2 -translate-y-1/2 h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-[#EDF2F7] border border-[#CBD5E0]" />
                 <AddEventModal 
                   trigger={
-                    <button className="w-full h-10 border border-dashed border-[#E2E8F0] rounded-xl flex items-center justify-center text-[#A0AEC0] hover:text-[#718096] hover:bg-white hover:border-[#CBD5E0] hover:shadow-sm transition-all cursor-pointer group">
-                      <Plus className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
-                      <span className="text-[10px] font-bold uppercase tracking-widest">Add Event</span>
+                    <button className="w-full h-14 border-2 border-dashed border-[#EDF2F7] rounded-[1.5rem] flex items-center justify-center text-[#A0AEC0] hover:text-[#2D3748] hover:bg-white hover:border-[#CBD5E0] hover:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] transition-all duration-300 cursor-pointer group">
+                      <Plus className="h-5 w-5 mr-3 group-hover:rotate-90 transition-transform duration-300" />
+                      <span className="text-[11px] font-bold uppercase tracking-[0.2em]">Schedule Slot</span>
                     </button>
                   } 
                 />
