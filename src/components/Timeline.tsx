@@ -297,7 +297,14 @@ export function Timeline() {
       
       const firstEvent = newEventsOrder[0];
       if (!firstEvent) return;
-      let currentTimePointer = new Date(firstEvent.startTime);
+
+      // Calculate the start time for the day based on the original first event's time 
+      // to ensure the schedule start remains anchored correctly during reordering.
+      const originalDayEvents = [...events].sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
+      const firstOriginalEvent = originalDayEvents[0];
+      if (!firstOriginalEvent) return;
+      
+      let currentTimePointer = new Date(firstOriginalEvent.startTime);
       const updatedEventsForDay = newEventsOrder.map((e, idx) => {
         const start = idx === 0 ? currentTimePointer : addMinutes(currentTimePointer, bufferMinutes);
         const updated = { ...e, startTime: start.toISOString() };
