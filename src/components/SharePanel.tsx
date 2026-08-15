@@ -38,8 +38,8 @@ export function SharePanel() {
       document.body.classList.add('print-tabular');
       
       // Explicitly hide the toast container just before printing as a fallback
-      const toasters = document.querySelectorAll('.sonner-toaster');
-      toasters.forEach(t => (t as HTMLElement).style.display = 'none');
+      const toasters = document.querySelectorAll('.sonner-toaster, .toaster');
+      toasters.forEach(t => (t as HTMLElement).style.setProperty('display', 'none', 'important'));
 
       window.print();
       
@@ -49,7 +49,7 @@ export function SharePanel() {
       
       toast.dismiss(toastId);
       toast.success("Schedule exported successfully");
-    }, 800);
+    }, 1000);
   };
 
   return (
