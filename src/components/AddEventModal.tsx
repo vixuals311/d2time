@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
-import { parse, format, isBefore, isAfter, startOfMinute, addMinutes, parseISO } from "date-fns";
+import { parse, format, isBefore, isAfter, startOfMinute, addMinutes, parseISO, startOfDay } from "date-fns";
 import {
   Dialog,
   DialogContent,
@@ -30,6 +30,16 @@ export function AddEventModal() {
   const bufferMinutes = useTimelineStore((state) => state.bufferMinutes);
   const workingHours = useTimelineStore((state) => state.workingHours);
   const durationOptions = useTimelineStore((state) => state.durationOptions);
+  const selectedDate = useTimelineStore((state) => state.selectedDate);
+
+  const initialDate = () => {
+    const now = new Date();
+    const currentSelected = parseISO(selectedDate);
+    if (startOfDay(currentSelected) > startOfDay(now)) {
+      return parse(`${format(currentSelected, "yyyy-MM-dd")} ${workingHours.start}`, "yyyy-MM-dd HH:mm", new Date());
+    }
+    return startOfMinute(now);
+  };
 
   const [formData, setFormData] = useState<{
     title: string;
@@ -39,11 +49,18 @@ export function AddEventModal() {
     location: string;
   }>({
     title: "",
-    startDate: startOfMinute(new Date()),
+    startDate: initialDate(),
     durationMinutes: 30,
     type: "meeting",
     location: "",
   });
+
+  const handleOpenChange = (isOpen: boolean) => {
+    setOpen(isOpen);
+    if (isOpen) {
+      setFormData(prev => ({ ...prev, startDate: initialDate() }));
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -152,7 +169,7 @@ export function AddEventModal() {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <button className="flex items-center gap-2 rounded-xl bg-[#2D3748] px-4 py-2 text-sm font-medium text-white shadow-md hover:bg-[#1A202C] transition-all">
           <Plus className="h-4 w-4" /> Add Event
