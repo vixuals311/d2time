@@ -201,7 +201,8 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
                       ? `${profile.name}${profile.position ? ` (${profile.position}${profile.company ? ` at ${profile.company}` : ''})` : ''}`
                       : 'High-Profile Individual';
                     
-                    const gCalUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${format(startTime, "yyyyMMdd'T'HHmmss'Z'")}/${format(endTime, "yyyyMMdd'T'HHmmss'Z'")}&details=${encodeURIComponent(event.description || '')}&location=${encodeURIComponent(event.location || '')}`;
+                    // Compact GCal URL
+                    const gCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${format(startTime, "yyyyMMdd'T'HHmmss'Z'")}/${format(endTime, "yyyyMMdd'T'HHmmss'Z'")}${event.location ? `&location=${encodeURIComponent(event.location)}` : ''}`;
 
                     const message = `Dear Guest,\n\nYou have a ${event.type} today with ${profileInfo}.\n\nTime: ${format(startTime, "h:mm a")} - ${format(endTime, "h:mm a")}\nLocation: ${event.location || 'Not specified'}\n\nAdd to calendar: ${gCalUrl}`;
                     
