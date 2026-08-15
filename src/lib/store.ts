@@ -43,6 +43,7 @@ interface TimelineState {
   setDurationOptions: (options: number[]) => void;
   setSelectedDate: (date: Date) => void;
   setProfile: (profile: Profile) => void;
+  populateRandomData: () => void;
 }
 
 export const useTimelineStore = create<TimelineState>()(
@@ -153,6 +154,74 @@ export const useTimelineStore = create<TimelineState>()(
       setDurationOptions: (options) => set({ durationOptions: options }),
       setSelectedDate: (date) => set({ selectedDate: startOfDay(date).toISOString() }),
       setProfile: (profile: Profile) => set({ profile }),
+      populateRandomData: () => {
+        set((state) => {
+          const newEvents = [...state.events];
+          const titles = [
+            'Breakfast Meeting', 'Client Review', 'Strategy Session', 'Lunch with Board', 
+            'Site Visit', 'Interview: Tech Lead', 'Team Standup', 'Executive Briefing',
+            'Project Alpha Sync', 'Investor Call', 'Design Review', 'Networking Mixer'
+          ];
+          const types: EventType[] = ['visit', 'meeting', 'guest', 'break'];
+          const locations = ['Main Conference Room', 'Sky Lounge', 'Café 24', 'Virtual Zoom Room', 'Warehouse District', 'Lobby A'];
+          const durations = [30, 60, 90, 120];
+
+          // Generate for -1 to +7 days
+          for (let d = -1; d <= 7; d++) {
+            const date = new Date();
+            date.setDate(date.getDate() + d);
+            const dateString = startOfDay(date).toISOString();
+            
+            // Skip if this day already has events
+            if (newEvents.some(e => startOfDay(parseISO(e.startTime)).toISOString() === dateString)) {
+              continue;
+            }
+
+            const [startH, startM] = state.workingHours.start.split(':').map(val => Number(val) || 0);
+            const [endH, endM] = state.workingHours.end.split(':').map(val => Number(val) || 0);
+            
+            let currentPointer = new Date(date);
+            currentPointer.setHours(startH || 0, startM || 0, 0, 0);
+            
+            const endTimeLimit = new Date(date);
+            endTimeLimit.setHours(endH || 0, endM || 0, 0, 0);
+
+
+            // Add 3-5 events per day
+            const numEvents = Math.floor(Math.random() * 3) + 3;
+            
+            for (let i = 0; i < numEvents; i++) {
+              const duration = durations[Math.floor(Math.random() * durations.length)] ?? 60;
+              const type = types[Math.floor(Math.random() * types.length)] ?? 'meeting';
+              const title = titles[Math.floor(Math.random() * titles.length)] ?? 'Meeting';
+              
+              const potentialEnd = addMinutes(currentPointer, duration + state.bufferMinutes);
+              if (potentialEnd.getTime() <= endTimeLimit.getTime()) {
+                newEvents.push({
+                  id: crypto.randomUUID(),
+                  title: `${title} ${i + 1}`,
+                  startTime: currentPointer.toISOString(),
+                  durationMinutes: duration,
+                  type,
+                  location: locations[Math.floor(Math.random() * locations.length)] ?? 'Conference Room',
+                  description: `Generated random ${type} for testing purposes.`
+                });
+                
+                // Move pointer: duration + buffer + some random gap (0, 30, or 60 mins)
+                const gap = [0, 30, 60][Math.floor(Math.random() * 3)] ?? 0;
+                currentPointer = addMinutes(currentPointer, duration + state.bufferMinutes + gap);
+              }
+
+            }
+          }
+
+          return {
+            events: newEvents.sort(
+              (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+            ),
+          };
+        });
+      },
 
     }),
     {
