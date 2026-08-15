@@ -124,7 +124,7 @@ export function AddEventModal() {
                 <div className="relative">
                   <DatePicker
                     selected={formData.startDate}
-                    onChange={(date) => date && setFormData(prev => ({ ...prev, startDate: date }))}
+                    onChange={(date: Date | null) => date && setFormData(prev => ({ ...prev, startDate: date }))}
                     showTimeSelect
                     timeFormat="HH:mm"
                     timeIntervals={15}
