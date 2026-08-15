@@ -147,7 +147,7 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
             </div>
 
             <div className="flex-1">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-1.5 md:mb-2 gap-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 md:mb-3 gap-2">
                 <div className="flex items-center gap-2">
                   <span className={cn(
                     "rounded-full px-3 py-1 text-[9px] font-bold uppercase tracking-[0.15em] border flex items-center gap-1.5 shadow-sm",
@@ -166,16 +166,16 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
               <h3 className="font-semibold text-[#1A202C] text-sm md:text-lg leading-snug truncate md:whitespace-normal">{event.title}</h3>
               
               {(event.location || event.attendees) && (
-                <div className="flex flex-wrap gap-4 mt-3">
+                <div className="flex flex-wrap gap-4 mt-4">
                   {event.location && (
-                    <div className="flex items-center gap-1.5 text-xs text-[#718096]">
-                      <MapPin className="h-3 w-3" />
+                    <div className="flex items-center gap-1.5 text-xs font-medium text-[#718096]">
+                      <MapPin className="h-3.5 w-3.5" />
                       {event.location}
                     </div>
                   )}
                   {event.attendees && event.attendees.length > 0 && (
-                    <div className="flex items-center gap-1.5 text-xs text-[#718096]">
-                      <Users className="h-3 w-3" />
+                    <div className="flex items-center gap-1.5 text-xs font-medium text-[#718096]">
+                      <Users className="h-3.5 w-3.5" />
                       {event.attendees.length} people
                     </div>
                   )}
@@ -193,12 +193,12 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
           </div>
 
           {/* Buffer Indicator */}
-          <div className="absolute -bottom-6 md:-bottom-8 left-6 md:left-8 right-0 flex items-center gap-2 md:gap-3 print:hidden">
-            <div className="h-[1px] flex-1 bg-dashed border-t border-dashed border-[#E2E8F0]" />
-            <span className="text-[8px] md:text-[9px] font-bold text-[#CBD5E0] uppercase tracking-[0.1em] md:tracking-[0.2em] whitespace-nowrap">
+          <div className="absolute -bottom-8 md:-bottom-12 left-8 md:left-12 right-0 flex items-center gap-4 print:hidden">
+            <div className="h-[1px] flex-1 border-t border-dashed border-[#E2E8F0]" />
+            <span className="text-[10px] font-bold text-[#A0AEC0] uppercase tracking-[0.2em] whitespace-nowrap">
               {bufferMinutes}m buffer
             </span>
-            <div className="h-[1px] flex-1 bg-dashed border-t border-dashed border-[#E2E8F0]" />
+            <div className="h-[1px] flex-1 border-t border-dashed border-[#E2E8F0]" />
           </div>
         </div>
       </div>
