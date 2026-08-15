@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Plus, Share2, Calendar as CalendarIcon, Settings as SettingsIcon, ChevronLeft, ChevronRight, CalendarDays, Moon, Sun } from "lucide-react";
+import { Plus, Share2, Calendar as CalendarIcon, Settings as SettingsIcon, ChevronLeft, ChevronRight, CalendarDays, Moon, Sun, User } from "lucide-react";
 import { useTimelineStore } from "../lib/store";
 import { format, addDays, parseISO, startOfDay } from "date-fns";
 import { Timeline } from "../components/Timeline";
