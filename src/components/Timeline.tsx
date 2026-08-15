@@ -357,10 +357,15 @@ export function Timeline() {
              <div className="w-16 invisible" />
              <div className="relative flex-1">
                 <div className="absolute -left-[31px] md:-left-[39px] top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-[#EDF2F7] border border-[#CBD5E0]" />
-                <div className="h-10 border border-dashed border-[#E2E8F0] rounded-xl flex items-center justify-center text-[#A0AEC0] hover:text-[#718096] hover:bg-white hover:border-[#CBD5E0] transition-all group">
-                   <Plus className="h-4 w-4 mr-2" />
-                   <span className="text-[10px] font-bold uppercase tracking-widest">Add Event</span>
-                   <div className="hidden group-hover:block"><AddEventModal trigger={null} /></div>
+                <div className="h-10 border border-dashed border-[#E2E8F0] rounded-xl flex items-center justify-center text-[#A0AEC0] hover:text-[#718096] hover:bg-white hover:border-[#CBD5E0] transition-all relative group/inner">
+                   <AddEventModal 
+                     trigger={
+                       <button className="flex items-center justify-center w-full h-full">
+                         <Plus className="h-4 w-4 mr-2" />
+                         <span className="text-[10px] font-bold uppercase tracking-widest">Add Event</span>
+                       </button>
+                     } 
+                   />
                 </div>
              </div>
           </div>
