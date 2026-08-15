@@ -109,19 +109,21 @@ export const useTimelineStore = create<TimelineState>()(
             
             for (let i = index + 1; i < sorted.length; i++) {
               const currentEvent = sorted[i];
+              if (!currentEvent) continue;
+              
               const eventStart = parseISO(currentEvent.startTime);
               
               if (isBefore(eventStart, currentTime)) {
                 sorted[i] = {
                   ...currentEvent,
                   startTime: currentTime.toISOString()
-                };
+                } as TimelineEvent;
                 currentTime = addMinutes(currentTime, currentEvent.durationMinutes + state.bufferMinutes);
               } else {
-                // If it doesn't clash anymore, we can stop shifting (optional, but cleaner)
                 break;
               }
             }
+
             return { events: sorted };
           }
 
