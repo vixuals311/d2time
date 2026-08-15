@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Share2, Link as LinkIcon, FileText, Check } from "lucide-react";
 import {
   Dialog,
@@ -12,6 +12,7 @@ import { useTimelineStore } from "../lib/store";
 
 export function SharePanel() {
   const [copied, setCopied] = useState(false);
+  const [open, setOpen] = useState(false);
   const selectedDate = useTimelineStore((state) => state.selectedDate);
 
   const copyLink = () => {
@@ -25,14 +26,23 @@ export function SharePanel() {
 
   const exportPDF = () => {
     toast.loading("Preparing print view...", { id: "pdf-gen" });
-    // Use window.print() for faster, higher quality PDF generation
-    window.print();
-    toast.dismiss("pdf-gen");
-    toast.success("Print dialog opened");
+    
+    // Close the dialog first so it's not in the print view
+    setOpen(false);
+
+    // Give the browser time to remove the dialog from the DOM
+    setTimeout(() => {
+      window.print();
+      toast.dismiss("pdf-gen");
+      toast.success("Print dialog opened");
+    }, 300);
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={(val) => {
+      setOpen(val);
+      if (val) toast.dismiss("pdf-gen");
+    }}>
       <DialogTrigger asChild>
         <button className="flex items-center gap-2 rounded-2xl bg-white px-5 py-2.5 text-sm font-semibold text-[#4A5568] shadow-[0_2px_10px_-2px_rgba(0,0,0,0.05)] border border-[#EDF2F7] hover:bg-[#F7FAFC] transition-all">
           <Share2 className="h-4 w-4" /> Share Schedule

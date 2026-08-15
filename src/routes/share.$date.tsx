@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useTimelineStore } from '../lib/store';
 import { format, parseISO, startOfDay, addMinutes } from 'date-fns';
-import { Clock, MapPin, Users } from 'lucide-react';
+import { Clock, MapPin, Users, Calendar as CalendarIcon } from 'lucide-react';
 import { cn } from '../lib/utils';
 
 export const Route = createFileRoute('/share/$date')({
@@ -23,10 +23,16 @@ function SharePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F9FB] p-8 md:p-12 font-sans">
+    <div className="min-h-screen bg-[#F8F9FB] p-8 md:p-12 font-sans selection:bg-[#EBF8FF]">
       <div className="mx-auto max-w-2xl">
         <header className="mb-12">
-          <h1 className="text-3xl font-serif font-medium text-[#1A202C]">Daily Timeline</h1>
+          <div className="flex items-center gap-2 mb-2">
+            <div className="h-8 w-8 rounded-xl bg-[#2D3748] flex items-center justify-center text-white">
+              <CalendarIcon className="h-4 w-4" />
+            </div>
+            <span className="text-xs font-bold uppercase tracking-widest text-[#A0AEC0]">Schedule Shared</span>
+          </div>
+          <h1 className="text-3xl font-serif font-medium text-[#1A202C] tracking-tight">Daily Timeline</h1>
           <p className="text-[#718096] text-lg mt-1">{format(parseISO(date), "EEEE, MMMM do, yyyy")}</p>
         </header>
 
@@ -35,14 +41,14 @@ function SharePage() {
             <p className="text-[#718096]">No events scheduled for this day.</p>
           </div>
         ) : (
-          <div className="space-y-6 relative pl-4">
+          <div className="space-y-6 relative pl-4 pb-12">
             <div className="absolute left-6 top-4 bottom-4 w-[2px] bg-[#EDF2F7] -z-10" />
             {events.map((event) => {
               const start = parseISO(event.startTime);
               const end = addMinutes(start, event.durationMinutes);
               return (
                 <div key={event.id} className="relative group">
-                  <div className="flex items-center gap-4 rounded-2xl bg-white p-5 shadow-sm border border-[#EDF2F7]">
+                  <div className="flex items-center gap-4 rounded-2xl bg-white p-5 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.05)] border border-transparent transition-all">
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-2">
                         <span className={cn(

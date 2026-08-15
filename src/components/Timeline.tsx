@@ -79,7 +79,7 @@ function SortableEventItem({ event, bufferMinutes }: SortableEventItemProps) {
         <button
           {...attributes}
           {...listeners}
-          className="cursor-grab text-[#CBD5E0] hover:text-[#A0AEC0] transition-colors"
+          className="cursor-grab text-[#CBD5E0] hover:text-[#A0AEC0] transition-colors print:hidden"
         >
           <GripVertical className="h-5 w-5" />
         </button>
@@ -118,7 +118,7 @@ function SortableEventItem({ event, bufferMinutes }: SortableEventItemProps) {
           )}
         </div>
 
-        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
+        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all print:hidden">
           <button
             onClick={() => {
               const fmt = (d: Date) => format(d, "yyyyMMdd'T'HHmmss'Z'");
@@ -185,7 +185,7 @@ function SortableEventItem({ event, bufferMinutes }: SortableEventItemProps) {
 
 
       {/* Buffer Indicator */}
-      <div className="absolute -bottom-7 left-14 right-8 flex items-center gap-3">
+      <div className="absolute -bottom-7 left-14 right-8 flex items-center gap-3 print:hidden">
         <div className="h-[1px] flex-1 bg-dashed bg-[#E2E8F0] border-t border-dashed" />
         <span className="text-[10px] font-medium text-[#A0AEC0] uppercase tracking-widest whitespace-nowrap">
           {bufferMinutes}m buffer
@@ -274,7 +274,7 @@ export function Timeline() {
       onDragEnd={handleDragEnd}
     >
       <SortableContext items={events.map((e) => e.id)} strategy={verticalListSortingStrategy}>
-        <div className="relative pl-4">
+        <div className="relative pl-4 pb-12">
           {/* Vertical line */}
           <div className="absolute left-6 top-4 bottom-4 w-[2px] bg-[#EDF2F7] -z-10" />
           
