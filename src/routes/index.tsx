@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Plus, Share2, Calendar as CalendarIcon, Settings as SettingsIcon, ChevronLeft, ChevronRight, CalendarDays, Moon, Sun } from "lucide-react";
+import { Plus, Share2, Calendar as CalendarIcon, Settings as SettingsIcon, ChevronLeft, ChevronRight, CalendarDays, Moon, Sun, User } from "lucide-react";
 import { useTimelineStore } from "../lib/store";
 import { format, addDays, parseISO, startOfDay } from "date-fns";
 import { Timeline } from "../components/Timeline";
@@ -28,99 +28,101 @@ function Index() {
   const handleToday = () => setSelectedDate(new Date());
 
   return (
-    <div className="min-h-screen bg-background px-4 py-6 md:px-12 md:py-16 font-sans selection:bg-accent">
+    <div className="min-h-screen bg-[#F7FAFC] px-4 py-6 md:px-12 md:py-16 font-sans selection:bg-accent text-[#1A202C]">
       <Toaster position="top-center" richColors />
       
-      <header className="mx-auto max-w-4xl mb-12 md:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8 print:hidden">
-        <div className="flex-1">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="h-10 w-10 rounded-2xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-gray-200/50 animate-float">
-              <CalendarIcon className="h-5 w-5" />
-            </div>
-            <div>
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground block leading-none mb-1">Executive Suite</span>
-              <span className="text-xs font-semibold text-foreground/70">Personal Assistant v2.0</span>
-            </div>
+      <header className="mx-auto max-w-4xl mb-12 flex items-center justify-between print:hidden">
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-xl bg-[#2D3748] flex items-center justify-center text-white shadow-lg shadow-gray-200/40">
+            <CalendarIcon className="h-5 w-5" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-serif font-medium text-foreground tracking-tight text-gradient">Timeline</h1>
-
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4 mt-3">
-            <p className="text-muted-foreground text-lg md:text-xl font-light">{format(currentSelectedDate, "EEEE, MMMM do")}</p>
-            <div className="flex items-center w-full justify-between sm:w-auto bg-card border border-border rounded-xl shadow-sm px-1 py-1 print:hidden">
-              <button 
-                onClick={handlePrevDay}
-                className="p-1.5 hover:bg-accent rounded-lg transition-colors text-muted-foreground"
-                title="Previous Day"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </button>
-              
-              <div className="flex items-center gap-2 px-2">
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <button 
-                      className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-foreground hover:bg-accent rounded-lg transition-colors flex items-center gap-1.5"
-                    >
-                      <CalendarDays className="h-3 w-3" />
-                      Pick Date
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="center">
-                    <Calendar
-                      mode="single"
-                      selected={currentSelectedDate}
-                      onSelect={(date) => date && setSelectedDate(date)}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-
-                <button 
-                  onClick={handleToday}
-                  className={cn(
-                    "px-2 py-1 text-[10px] font-bold uppercase tracking-wider hover:bg-accent rounded-lg transition-colors",
-                    format(new Date(), "yyyy-MM-dd") === selectedDate ? "text-primary bg-accent" : "text-muted-foreground"
-                  )}
-                >
-                  Today
-                </button>
-              </div>
-
-              <button 
-                onClick={handleNextDay}
-                className="p-1.5 hover:bg-accent rounded-lg transition-colors text-muted-foreground"
-                title="Next Day"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </button>
-            </div>
+          <div className="hidden sm:block">
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#A0AEC0] block leading-none mb-1">Executive Suite</span>
+            <span className="text-xs font-semibold text-[#4A5568]">Personal Assistant v2.0</span>
           </div>
         </div>
         
-        <div className="flex items-center gap-2 md:gap-3 print:hidden w-full md:w-auto">
+        <div className="flex items-center gap-2">
           <button
             onClick={toggleTheme}
-            className="flex h-10 w-10 items-center justify-center rounded-xl bg-card text-foreground shadow-sm border border-border hover:bg-accent transition-all"
-            title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+            className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-[#4A5568] shadow-sm border border-[#E2E8F0] hover:bg-[#F7FAFC] transition-all"
           >
             {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
           </button>
-          <div className="flex-1 md:flex-none">
-            <SharePanel />
+          <div className="h-10 w-10 rounded-full bg-[#EDF2F7] flex items-center justify-center text-[#A0AEC0] border border-[#E2E8F0]">
+            <User className="h-5 w-5" />
           </div>
-          <div className="flex-1 md:flex-none">
-            <AddEventModal />
-          </div>
-          <Link 
-            to="/settings"
-            className="flex h-10 w-10 items-center justify-center rounded-xl bg-card text-foreground shadow-sm border border-border hover:bg-accent transition-all"
-            title="Settings"
-          >
-            <SettingsIcon className="h-4 w-4" />
-          </Link>
         </div>
-
       </header>
+
+      <div className="mx-auto max-w-4xl mb-12">
+        <h1 className="text-[56px] font-serif font-bold text-[#1A202C] tracking-tight leading-[1.1]">Timeline</h1>
+        <p className="text-[#A0AEC0] text-2xl font-light mt-2">{format(currentSelectedDate, "EEEE, MMMM do")}</p>
+        
+        <div className="mt-8 flex flex-col sm:flex-row items-center gap-4">
+          <div className="flex items-center w-full justify-between sm:w-auto bg-white border border-[#E2E8F0] rounded-2xl shadow-sm px-2 py-2 print:hidden flex-1 sm:flex-none">
+            <button 
+              onClick={handlePrevDay}
+              className="p-2 hover:bg-[#F7FAFC] rounded-xl transition-colors text-[#A0AEC0]"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            
+            <div className="flex items-center gap-6 px-6 border-l border-r border-[#EDF2F7]">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button 
+                    className="flex items-center gap-2 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-[#2D3748] hover:bg-[#F7FAFC] rounded-xl transition-all"
+                  >
+                    <CalendarDays className="h-4 w-4 text-[#A0AEC0]" />
+                    Pick Date
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="center">
+                  <Calendar
+                    mode="single"
+                    selected={currentSelectedDate}
+                    onSelect={(date) => date && setSelectedDate(date)}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+
+              <button 
+                onClick={handleToday}
+                className={cn(
+                  "px-4 py-1.5 text-xs font-bold uppercase tracking-wider hover:bg-[#F7FAFC] rounded-xl transition-colors",
+                  format(new Date(), "yyyy-MM-dd") === selectedDate ? "text-[#3B82F6]" : "text-[#718096]"
+                )}
+              >
+                Today
+              </button>
+            </div>
+
+            <button 
+              onClick={handleNextDay}
+              className="p-2 hover:bg-[#F7FAFC] rounded-xl transition-colors text-[#A0AEC0]"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+          </div>
+
+          <div className="flex items-center gap-3 w-full sm:w-auto flex-1 sm:flex-none">
+            <div className="flex-1 sm:flex-none">
+              <SharePanel />
+            </div>
+            <div className="flex-1 sm:flex-none">
+              <AddEventModal />
+            </div>
+            <Link 
+              to="/settings"
+              className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-[#A0AEC0] shadow-sm border border-[#E2E8F0] hover:text-[#4A5568] hover:bg-[#F7FAFC] transition-all"
+            >
+              <SettingsIcon className="h-5 w-5" />
+            </Link>
+          </div>
+        </div>
+      </div>
 
       <main className="mx-auto max-w-4xl">
         <Timeline />
