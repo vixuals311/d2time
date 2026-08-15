@@ -6,7 +6,7 @@ import { Timeline } from "../components/Timeline";
 import { AddEventModal } from "../components/AddEventModal";
 import { SharePanel } from "../components/SharePanel";
 import { useReminders } from "../lib/useReminders";
-import { Toaster } from "sonner";
+
 import { Calendar } from "../components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "../components/ui/popover";
 import { cn } from "../lib/utils";
@@ -31,7 +31,7 @@ function Index() {
 
   return (
     <div className="min-h-screen bg-background px-4 py-6 md:px-12 md:py-16 font-sans selection:bg-accent relative">
-      <Toaster position="top-center" richColors />
+      
       
       <div className="absolute top-6 right-4 md:top-10 md:right-12 flex items-center gap-2 md:gap-3 print:hidden z-10">
         <AuthButton />
