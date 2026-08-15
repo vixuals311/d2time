@@ -7,6 +7,9 @@ import {
   useSensor,
   useSensors,
   DragEndEvent,
+  DragStartEvent,
+  DragOverlay,
+  defaultDropAnimationSideEffects,
 } from '@dnd-kit/core';
 import {
   arrayMove,
@@ -80,8 +83,9 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
       ref={setNodeRef} 
       style={{ ...style, animationDelay: `${index * 0.1}s` }} 
       className={cn(
-        "relative mb-8 md:mb-12 group animate-event",
-        isEventPast && "opacity-60 grayscale-[0.5]"
+        "relative mb-8 md:mb-12 group animate-event transition-all duration-300",
+        isDragging && "opacity-0 scale-95",
+        isEventPast && !isDragging && "opacity-60 grayscale-[0.5]"
       )}
     >
       <div className="flex gap-4 md:gap-8">
@@ -109,13 +113,12 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
           <div
             className={cn(
               "relative flex items-center gap-3 md:gap-4 rounded-xl md:rounded-2xl bg-white p-3 md:p-5 shadow-[0_2px_12px_-2px_rgba(0,0,0,0.04)] md:shadow-[0_4px_20px_-2px_rgba(0,0,0,0.05)] border border-transparent hover:border-[#E2E8F0] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)] transition-all",
-              isDragging && "opacity-50"
             )}
           >
             <button
               {...attributes}
               {...listeners}
-              className="cursor-grab text-[#CBD5E0] hover:text-[#A0AEC0] transition-colors print:hidden"
+              className="p-1 md:p-2 -ml-2 text-[#CBD5E0] hover:text-[#A0AEC0] hover:bg-[#F7FAFC] rounded-lg transition-all print:hidden touch-none"
             >
               <GripVertical className="h-5 w-5" />
             </button>
@@ -238,6 +241,7 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
 export function Timeline() {
   const { events: allEvents, bufferMinutes, setEvents, workingHours, selectedDate } = useTimelineStore();
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 60000);
@@ -249,16 +253,27 @@ export function Timeline() {
     return eventDate === selectedDate;
   });
 
+  const activeEvent = events.find(e => e.id === activeId);
+
   const isToday = startOfDay(new Date()).toISOString() === selectedDate;
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
 
+  function handleDragStart(event: DragStartEvent) {
+    setActiveId(event.active.id as string);
+  }
+
   function handleDragEnd(event: DragEndEvent) {
+    setActiveId(null);
     const { active, over } = event;
 
     if (over && active.id !== over.id) {
@@ -325,7 +340,9 @@ export function Timeline() {
     <DndContext
       sensors={sensors}
       collisionDetection={closestCenter}
+      onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
+      onDragCancel={() => setActiveId(null)}
     >
       <SortableContext items={events.map((e) => e.id)} strategy={verticalListSortingStrategy}>
         <div className="relative pl-0 md:pl-4 pb-12">
@@ -368,6 +385,37 @@ export function Timeline() {
           </div>
         </div>
       </SortableContext>
+      <DragOverlay adjustScale={false} dropAnimation={{
+        sideEffects: defaultDropAnimationSideEffects({
+          styles: {
+            active: {
+              opacity: '0.4',
+            },
+          },
+        }),
+      }}>
+        {activeId && activeEvent ? (
+          <div className="flex gap-4 md:gap-8 opacity-90 scale-105 transition-transform duration-200">
+            <div className="w-12 md:w-16 pt-1 text-right flex-shrink-0">
+              <div className="text-[10px] md:text-xs font-bold text-[#2D3748]">
+                {format(new Date(activeEvent.startTime), "h:mm")}
+              </div>
+              <div className="text-[8px] md:text-[10px] text-[#A0AEC0] font-medium uppercase tracking-tighter">
+                {format(new Date(activeEvent.startTime), "a")}
+              </div>
+            </div>
+            <div className="relative flex-1">
+              <div className="absolute -left-[27px] md:-left-[41px] top-3 h-2.5 w-2.5 md:h-3 md:w-3 rounded-full border-2 bg-white border-[#2D3748] shadow-[0_0_0_4px_rgba(45,55,72,0.1)]" />
+              <div className="flex items-center gap-3 md:gap-4 rounded-xl md:rounded-2xl bg-white p-3 md:p-5 shadow-[0_12px_40px_-4px_rgba(0,0,0,0.12)] border border-[#E2E8F0]">
+                <GripVertical className="h-5 w-5 text-[#CBD5E0]" />
+                <div className="flex-1">
+                  <h3 className="font-semibold text-[#1A202C] text-sm md:text-lg">{activeEvent.title}</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : null}
+      </DragOverlay>
     </DndContext>
   );
 }
