@@ -10,6 +10,15 @@
   }
 }
 
+@media print {
+  .print-hidden,
+  [class*="toaster"],
+  [class*="toast"],
+  .sonner-toaster {
+    display: none !important;
+  }
+}
+
 @keyframes event-entrance {
   from {
     opacity: 0;
