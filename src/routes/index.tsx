@@ -114,26 +114,12 @@ function Index() {
         </div>
         
         <div className="flex items-center gap-2 md:gap-3 print:hidden w-full md:w-auto">
-          <button
-            onClick={toggleTheme}
-            className="flex h-10 w-10 items-center justify-center rounded-xl bg-card text-foreground shadow-sm border border-border hover:bg-accent transition-all"
-            title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
-          >
-            {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
-          </button>
           <div className="flex-1 md:flex-none">
             <SharePanel />
           </div>
           <div className="flex-1 md:flex-none">
             <AddEventModal />
           </div>
-          <Link 
-            to="/settings"
-            className="flex h-10 w-10 items-center justify-center rounded-xl bg-card text-foreground shadow-sm border border-border hover:bg-accent transition-all"
-            title="Settings"
-          >
-            <SettingsIcon className="h-4 w-4" />
-          </Link>
         </div>
 
       </header>
