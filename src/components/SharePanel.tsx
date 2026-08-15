@@ -36,12 +36,20 @@ export function SharePanel() {
     setTimeout(() => {
       // Add tabular print class to body temporarily
       document.body.classList.add('print-tabular');
+      
+      // Explicitly hide the toast container just before printing as a fallback
+      const toasters = document.querySelectorAll('.sonner-toaster');
+      toasters.forEach(t => (t as HTMLElement).style.display = 'none');
+
       window.print();
+      
+      // Restore the toaster display
+      toasters.forEach(t => (t as HTMLElement).style.display = '');
       document.body.classList.remove('print-tabular');
       
       toast.dismiss(toastId);
       toast.success("Schedule exported successfully");
-    }, 500);
+    }, 800);
   };
 
   return (
