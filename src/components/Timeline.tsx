@@ -90,7 +90,7 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
     >
       <div className="flex gap-4 md:gap-8">
         {/* Time Column */}
-        <div className="w-16 md:w-20 pt-1 text-right flex-shrink-0">
+        <div className="w-20 md:w-24 pt-1 text-right flex-shrink-0 pr-4 md:pr-6">
           <div className={cn(
             "text-[10px] md:text-xs font-bold tracking-tight",
             isEventPast ? "text-[#A0AEC0]" : "text-[#2D3748]"
