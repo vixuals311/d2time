@@ -12,6 +12,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "../components/ui/popove
 import { cn } from "../lib/utils";
 import { useTheme } from "../lib/theme";
 import { Link } from "@tanstack/react-router";
+import { AuthButton } from "../components/AuthButton";
+
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -32,6 +34,8 @@ function Index() {
       <Toaster position="top-center" richColors />
       
       <div className="absolute top-6 right-4 md:top-10 md:right-12 flex items-center gap-2 md:gap-3 print:hidden z-10">
+        <AuthButton />
+
         <button
           onClick={toggleTheme}
           className="flex h-9 w-9 items-center justify-center rounded-xl bg-card text-foreground shadow-sm border border-border hover:bg-accent transition-all"
