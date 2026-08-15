@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
-import { parse, format, isBefore, isAfter, startOfMinute, addMinutes, parseISO } from "date-fns";
+import { parse, format, isBefore, isAfter, startOfMinute, addMinutes, parseISO, startOfDay } from "date-fns";
 import {
   Dialog,
   DialogContent,
