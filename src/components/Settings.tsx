@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Settings as SettingsIcon, Plus, X } from "lucide-react";
+import { Settings as SettingsIcon, Plus, X, Sparkles } from "lucide-react";
 import { useTimelineStore } from "../lib/store";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
@@ -22,7 +22,8 @@ export function Settings() {
     durationOptions,
     setDurationOptions,
     profile,
-    setProfile
+    setProfile,
+    populateRandomData
   } = useTimelineStore();
 
   const [open, setOpen] = useState(false);
@@ -200,9 +201,26 @@ export function Settings() {
             </div>
           </div>
           
+          <div className="h-[1px] bg-[#EDF2F7]" />
+
+          <div className="space-y-3">
+            <Label className="text-sm font-medium">Debug Tools</Label>
+            <button
+              onClick={() => {
+                populateRandomData();
+                toast.success("Random data generated for 1 day ago to 7 days in future");
+              }}
+              className="w-full flex items-center justify-center gap-2 bg-[#F7FAFC] border border-[#EDF2F7] text-[#4A5568] py-2 rounded-xl text-sm font-medium hover:bg-[#EDF2F7] transition-all"
+            >
+              <Sparkles className="h-4 w-4 text-amber-500" />
+              Populate Random Data
+            </button>
+          </div>
+
           <p className="text-xs text-muted-foreground leading-relaxed italic">
             * Changes only apply after clicking Save. Buffers are automatically added between events when reordering.
           </p>
+
         </div>
         <DialogFooter>
           <button 
