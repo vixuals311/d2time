@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { Plus, Calendar, Share2, Settings } from "lucide-react";
+import { Plus, Share2, Calendar as CalendarIcon, Settings } from "lucide-react";
 import { useTimelineStore } from "../lib/store";
 import { format } from "date-fns";
+import { Timeline } from "../components/Timeline";
+import { AddEventModal } from "../components/AddEventModal";
+import { Toaster } from "sonner";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -12,50 +14,40 @@ function Index() {
   const events = useTimelineStore((state) => state.events);
 
   return (
-    <div className="min-h-screen bg-[#F8F9FB] p-8 font-sans">
-      <header className="mb-12 flex items-center justify-between">
+    <div className="min-h-screen bg-[#F8F9FB] px-6 py-8 md:p-12 font-sans selection:bg-[#EBF8FF]">
+      <Toaster position="top-center" richColors />
+      
+      <header className="mx-auto max-w-3xl mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <h1 className="text-3xl font-serif font-medium text-[#1A202C]">Daily Schedule</h1>
-          <p className="text-[#718096]">{format(new Date(), "EEEE, MMMM do, yyyy")}</p>
+          <div className="flex items-center gap-2 mb-2">
+            <div className="h-8 w-8 rounded-xl bg-[#2D3748] flex items-center justify-center text-white">
+              <CalendarIcon className="h-4 w-4" />
+            </div>
+            <span className="text-xs font-bold uppercase tracking-widest text-[#A0AEC0]">PA Assistant</span>
+          </div>
+          <h1 className="text-4xl font-serif font-medium text-[#1A202C] tracking-tight">Daily Timeline</h1>
+          <p className="text-[#718096] mt-1 text-lg">{format(new Date(), "EEEE, MMMM do")}</p>
         </div>
-        <div className="flex gap-4">
-          <button className="flex items-center gap-2 rounded-xl bg-white px-4 py-2 text-sm font-medium text-[#4A5568] shadow-sm hover:shadow-md transition-all">
-            <Share2 className="h-4 w-4" /> Share
+        
+        <div className="flex items-center gap-3">
+          <button className="flex items-center gap-2 rounded-2xl bg-white px-5 py-2.5 text-sm font-semibold text-[#4A5568] shadow-[0_2px_10px_-2px_rgba(0,0,0,0.05)] border border-[#EDF2F7] hover:bg-[#F7FAFC] transition-all">
+            <Share2 className="h-4 w-4" /> Share Schedule
           </button>
-          <button className="flex items-center gap-2 rounded-xl bg-[#2D3748] px-4 py-2 text-sm font-medium text-white shadow-md hover:bg-[#1A202C] transition-all">
-            <Plus className="h-4 w-4" /> Add Event
-          </button>
+          <AddEventModal />
         </div>
       </header>
 
-      <main className="mx-auto max-w-2xl">
-        <div className="relative space-y-6">
-          {events.length === 0 ? (
-            <div className="flex h-64 items-center justify-center rounded-3xl border-2 border-dashed border-[#E2E8F0] bg-white">
-              <p className="text-[#A0AEC0]">No events scheduled for today.</p>
-            </div>
-          ) : (
-            events.map((event) => (
-              <div
-                key={event.id}
-                className="group relative rounded-2xl bg-white p-6 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.1)] transition-all"
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="font-semibold text-[#2D3748]">{event.title}</h3>
-                    <p className="text-sm text-[#718096] mt-1">
-                      {format(new Date(event.startTime), "h:mm a")} • {event.durationMinutes} mins
-                    </p>
-                  </div>
-                  <span className="rounded-full bg-[#EBF8FF] px-3 py-1 text-xs font-medium text-[#3182CE] uppercase tracking-wider">
-                    {event.type}
-                  </span>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
+      <main className="mx-auto max-w-3xl">
+        <Timeline />
       </main>
+
+      <footer className="mx-auto max-w-3xl mt-20 pt-8 border-t border-[#EDF2F7] flex justify-between items-center text-[11px] font-medium text-[#A0AEC0] uppercase tracking-widest">
+        <span>&copy; 2026 Executive PA Suite</span>
+        <div className="flex gap-6">
+          <button className="hover:text-[#4A5568] transition-colors">Privacy</button>
+          <button className="hover:text-[#4A5568] transition-colors">Support</button>
+        </div>
+      </footer>
     </div>
   );
 }

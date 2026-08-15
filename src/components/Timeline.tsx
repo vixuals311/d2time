@@ -147,7 +147,9 @@ export function Timeline() {
       const newEvents = arrayMove(events, oldIndex, newIndex);
       
       // Update times based on new order and buffer
-      let currentTime = new Date(newEvents[0].startTime);
+      const firstEvent = newEvents[0];
+      if (!firstEvent) return;
+      let currentTime = new Date(firstEvent.startTime);
       const updatedEvents = newEvents.map((e, idx) => {
         const start = idx === 0 ? currentTime : addMinutes(currentTime, bufferMinutes);
         const updated = { ...e, startTime: start.toISOString() };
