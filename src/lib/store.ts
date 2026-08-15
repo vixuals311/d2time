@@ -2,20 +2,6 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { addMinutes, isBefore, isAfter, parseISO } from 'date-fns';
 
-const checkClash = (newEvent: TimelineEvent, existingEvents: TimelineEvent[]) => {
-  const newStart = parseISO(newEvent.startTime);
-  const newEnd = addMinutes(newStart, newEvent.durationMinutes);
-
-  return existingEvents.some((e) => {
-    const eStart = parseISO(e.startTime);
-    const eEnd = addMinutes(eStart, e.durationMinutes);
-    
-    // Check if new event overlaps with existing event
-    // (newStart < eEnd) && (newEnd > eStart)
-    return isBefore(newStart, eEnd) && isAfter(newEnd, eStart);
-  });
-};
-
 export type EventType = 'visit' | 'meeting' | 'guest' | 'break' | 'unavailable';
 
 export interface TimelineEvent {
@@ -62,7 +48,18 @@ export const useTimelineStore = create<TimelineState>()(
         let success = true;
         set((state) => {
           const newEvent = { ...event, id: crypto.randomUUID() };
-          const hasClash = checkClash(newEvent, state.events);
+          
+          // Check for clashes INCLUDING buffer
+          const hasClash = state.events.some((e) => {
+            const eStart = parseISO(e.startTime);
+            const eEnd = addMinutes(eStart, e.durationMinutes + state.bufferMinutes);
+            
+            const newStart = parseISO(newEvent.startTime);
+            const newEnd = addMinutes(newStart, newEvent.durationMinutes + state.bufferMinutes);
+            
+            return isBefore(newStart, eEnd) && isAfter(newEnd, eStart);
+          });
+
           if (hasClash) {
             success = false;
             return state;
@@ -81,7 +78,17 @@ export const useTimelineStore = create<TimelineState>()(
           const existing = state.events.find((e) => e.id === id);
           if (!existing) return state;
           const updated = { ...existing, ...updates };
-          const hasClash = checkClash(updated, state.events.filter((e) => e.id !== id));
+          
+          const hasClash = state.events.filter((e) => e.id !== id).some((e) => {
+            const eStart = parseISO(e.startTime);
+            const eEnd = addMinutes(eStart, e.durationMinutes + state.bufferMinutes);
+            
+            const updatedStart = parseISO(updated.startTime);
+            const updatedEnd = addMinutes(updatedStart, updated.durationMinutes + state.bufferMinutes);
+            
+            return isBefore(updatedStart, eEnd) && isAfter(updatedEnd, eStart);
+          });
+
           if (hasClash) {
             success = false;
             return state;

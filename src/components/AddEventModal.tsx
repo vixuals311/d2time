@@ -104,23 +104,30 @@ export function AddEventModal() {
     
     const isFuture = isAfter(time, startOfMinute(now)) || time.getTime() === startOfMinute(now).getTime();
 
-    return isWithinWorkingHours && isFuture;
+    // Check if selecting this time would immediately clash with an existing event's buffer
+    const hasClash = events.some((e) => {
+      const eStart = parseISO(e.startTime);
+      const eEndWithBuffer = addMinutes(eStart, e.durationMinutes + bufferMinutes);
+      return (isAfter(time, eStart) || time.getTime() === eStart.getTime()) && isBefore(time, eEndWithBuffer);
+    });
+
+    return isWithinWorkingHours && isFuture && !hasClash;
   };
 
   const getAvailableDuration = (duration: number) => {
     const eventStart = formData.startDate;
-    const eventEnd = new Date(eventStart.getTime() + duration * 60000);
+    const eventEnd = new Date(eventStart.getTime() + (duration + bufferMinutes) * 60000);
     
-    // Check clash with existing events
+    // Check clash with existing events (considering buffer)
     const hasClash = events.some((e) => {
       const eStart = parseISO(e.startTime);
-      const eEnd = addMinutes(eStart, e.durationMinutes);
-      return isBefore(eventStart, eEnd) && isAfter(eventEnd, eStart);
+      const eEndWithBuffer = addMinutes(eStart, e.durationMinutes + bufferMinutes);
+      return isBefore(eventStart, eEndWithBuffer) && isAfter(eventEnd, eStart);
     });
 
     if (hasClash) return false;
 
-    // Check if it fits before the next event
+    // Check if it fits before the next event (considering buffer)
     const nextEvent = events.find(e => isAfter(parseISO(e.startTime), eventStart));
     if (nextEvent) {
       const nextStart = parseISO(nextEvent.startTime);
