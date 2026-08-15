@@ -90,7 +90,7 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
     >
       <div className="flex gap-2 md:gap-4">
         {/* Time Column */}
-        <div className="w-12 md:w-16 pt-1.5 text-right flex-shrink-0">
+        <div className="w-10 md:w-14 pt-1.5 text-left flex-shrink-0">
           <div className={cn(
             "text-[9px] md:text-[11px] font-bold tracking-tighter",
             isEventPast ? "text-[#A0AEC0]" : "text-[#2D3748]"
@@ -106,7 +106,7 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
         <div className="relative flex-1 min-w-0">
           {/* Connector Dot */}
           <div className={cn(
-            "absolute -left-[17px] md:-left-[26px] top-3.5 h-2 w-2 md:h-2.5 md:w-2.5 rounded-full border-2 bg-white z-10 transition-transform group-hover:scale-125",
+            "absolute -left-[14px] md:-left-[18px] top-3.5 h-2 w-2 md:h-2.5 md:w-2.5 rounded-full border-2 bg-white z-10 transition-transform group-hover:scale-125",
             isEventPast ? "border-[#CBD5E0]" : "border-[#2D3748] shadow-[0_0_0_4px_rgba(45,55,72,0.1)]"
           )} />
 
@@ -355,7 +355,7 @@ export function Timeline() {
       <SortableContext items={events.map((e) => e.id)} strategy={verticalListSortingStrategy}>
         <div className="relative pl-0 md:pl-4 pb-12 print:hidden">
           {/* Vertical line - premium gradient */}
-          <div className="absolute left-[56px] md:left-[74px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-[#EDF2F7] via-[#CBD5E0] to-[#EDF2F7] -z-10 opacity-50" />
+          <div className="absolute left-[52px] md:left-[69px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-[#EDF2F7] via-[#CBD5E0] to-[#EDF2F7] -z-10 opacity-50" />
           
           {events.map((event, index) => {
             const startTime = new Date(event.startTime);
@@ -366,8 +366,8 @@ export function Timeline() {
               <div key={event.id} className="relative">
                 {isNow && (
                   <div className="absolute left-0 right-0 -top-8 flex items-center gap-2 z-20 print:hidden">
-                     <div className="w-12 md:w-16 text-right text-[8px] font-bold text-[#E53E3E] uppercase tracking-[0.1em] animate-pulse">Now</div>
-                     <div className="h-1.5 w-1.5 rounded-full bg-[#E53E3E] shadow-[0_0_10px_rgba(229,62,62,0.5)] animate-pulse" />
+                     <div className="w-10 md:w-14 text-left text-[8px] font-bold text-[#E53E3E] uppercase tracking-[0.1em] animate-pulse">Now</div>
+                     <div className="h-1.5 w-1.5 rounded-full bg-[#E53E3E] shadow-[0_0_10px_rgba(229,62,62,0.5)] animate-pulse -ml-1.5" />
                      <div className="h-[1px] flex-1 bg-gradient-to-r from-[#E53E3E] to-transparent opacity-20" />
                   </div>
                 )}
@@ -378,9 +378,9 @@ export function Timeline() {
 
           {/* Quick Add at the bottom */}
           <div className="flex gap-4 md:gap-8 items-center mt-4 print:hidden">
-             <div className="w-12 md:w-16 invisible" />
+             <div className="w-10 md:w-14 invisible" />
              <div className="relative flex-1">
-                <div className="absolute -left-[15px] md:-left-[24px] top-1/2 -translate-y-1/2 h-1 w-1 md:h-1.5 md:w-1.5 rounded-full bg-[#EDF2F7] border border-[#CBD5E0]" />
+                <div className="absolute -left-[12px] md:-left-[16px] top-1/2 -translate-y-1/2 h-1 w-1 md:h-1.5 md:w-1.5 rounded-full bg-[#EDF2F7] border border-[#CBD5E0]" />
                 <AddEventModal 
                   trigger={
                     <button className="w-full h-14 border-2 border-dashed border-[#EDF2F7] rounded-[1.5rem] flex items-center justify-center text-[#A0AEC0] hover:text-[#2D3748] hover:bg-white hover:border-[#CBD5E0] hover:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] transition-all duration-300 cursor-pointer group">
