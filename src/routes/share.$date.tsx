@@ -132,8 +132,7 @@ function SharePage() {
                     return (
                       <tr key={event.id} className="border-b border-[#E2E8F0]">
                         <td className="py-5 align-top">
-                          <div className="text-sm font-bold">{format(start, "h:mm a")}</div>
-                          <div className="text-[10px] text-[#A0AEC0] font-medium uppercase tracking-tight">{event.durationMinutes}m duration</div>
+                          <div className="text-sm font-bold">{format(start, "h:mm a")} - {format(end, "h:mm a")}</div>
                         </td>
                         <td className="px-4 py-5 align-top">
                           <div className="text-[9px] font-bold uppercase text-[#718096] mb-1 tracking-widest">{event.type}</div>
