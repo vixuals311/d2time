@@ -355,7 +355,7 @@ export function Timeline() {
       <SortableContext items={events.map((e) => e.id)} strategy={verticalListSortingStrategy}>
         <div className="relative pl-0 md:pl-4 pb-12 print:hidden">
           {/* Vertical line - premium gradient */}
-          <div className="absolute left-[120px] md:left-[136px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-[#EDF2F7] via-[#CBD5E0] to-[#EDF2F7] -z-10 opacity-50" />
+          <div className="absolute left-[56px] md:left-[74px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-[#EDF2F7] via-[#CBD5E0] to-[#EDF2F7] -z-10 opacity-50" />
           
           {events.map((event, index) => {
             const startTime = new Date(event.startTime);
@@ -365,9 +365,9 @@ export function Timeline() {
             return (
               <div key={event.id} className="relative">
                 {isNow && (
-                  <div className="absolute left-0 right-0 -top-8 flex items-center gap-4 z-20 print:hidden">
-                     <div className="w-24 md:w-28 text-right text-[9px] font-bold text-[#E53E3E] uppercase tracking-[0.2em] animate-pulse pr-6 md:pr-8">Now</div>
-                     <div className="h-2 w-2 rounded-full bg-[#E53E3E] shadow-[0_0_10px_rgba(229,62,62,0.5)] animate-pulse" />
+                  <div className="absolute left-0 right-0 -top-8 flex items-center gap-2 z-20 print:hidden">
+                     <div className="w-12 md:w-16 text-right text-[8px] font-bold text-[#E53E3E] uppercase tracking-[0.1em] animate-pulse">Now</div>
+                     <div className="h-1.5 w-1.5 rounded-full bg-[#E53E3E] shadow-[0_0_10px_rgba(229,62,62,0.5)] animate-pulse" />
                      <div className="h-[1px] flex-1 bg-gradient-to-r from-[#E53E3E] to-transparent opacity-20" />
                   </div>
                 )}
