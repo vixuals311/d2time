@@ -25,12 +25,9 @@ import { cn } from "@/lib/utils";
 
 export function AddEventModal() {
   const [open, setOpen] = useState(false);
-  const events = useTimelineStore((state) => state.events);
-  const addEvent = useTimelineStore((state) => state.addEvent);
-  const bufferMinutes = useTimelineStore((state) => state.bufferMinutes);
-  const workingHours = useTimelineStore((state) => state.workingHours);
-  const durationOptions = useTimelineStore((state) => state.durationOptions);
-  const selectedDate = useTimelineStore((state) => state.selectedDate);
+  const { events: allEvents, addEvent, bufferMinutes, workingHours, durationOptions, selectedDate } = useTimelineStore();
+  const events = allEvents.filter(e => startOfDay(parseISO(e.startTime)).toISOString() === selectedDate);
+
 
   const initialDate = () => {
     const now = new Date();
