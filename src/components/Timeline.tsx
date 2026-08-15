@@ -112,7 +112,7 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
 
           <div
             className={cn(
-              "relative flex items-center gap-3 md:gap-5 rounded-2xl md:rounded-[2rem] bg-white p-4 md:p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] border border-transparent hover:border-[#E2E8F0] hover:shadow-[0_20px_40px_-8px_rgba(0,0,0,0.06)] transition-all duration-500",
+              "relative flex items-center gap-2 md:gap-5 rounded-xl md:rounded-[2rem] bg-white p-3 md:p-6 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.03)] border border-transparent hover:border-[#E2E8F0] hover:shadow-[0_20px_40px_-8px_rgba(0,0,0,0.06)] transition-all duration-500",
             )}
           >
             <button
@@ -124,7 +124,7 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
             </button>
 
             <div className="flex-1">
-              <div className="flex items-center justify-between mb-1.5 md:mb-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-1.5 md:mb-2 gap-2">
                 <div className="flex items-center gap-2">
                   <span className={cn(
                     "rounded-full px-3 py-1 text-[9px] font-bold uppercase tracking-[0.15em] border flex items-center gap-1.5 shadow-sm",
@@ -160,7 +160,7 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
               )}
             </div>
 
-            <div className="flex items-center gap-0.5 md:gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-all print:hidden">
+            <div className="flex flex-col md:flex-row items-center gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-all print:hidden">
               <button
                 onClick={() => {
                   const fmt = (d: Date) => format(d, "yyyyMMdd'T'HHmmss'Z'");

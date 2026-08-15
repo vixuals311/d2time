@@ -26,10 +26,10 @@ function Index() {
   const handleToday = () => setSelectedDate(new Date());
 
   return (
-    <div className="min-h-screen bg-[#F8F9FB] px-6 py-8 md:px-12 md:py-16 font-sans selection:bg-[#EBF8FF]">
+    <div className="min-h-screen bg-[#F8F9FB] px-4 py-6 md:px-12 md:py-16 font-sans selection:bg-[#EBF8FF]">
       <Toaster position="top-center" richColors />
       
-      <header className="mx-auto max-w-4xl mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
+      <header className="mx-auto max-w-4xl mb-12 md:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8">
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-4">
             <div className="h-10 w-10 rounded-2xl bg-[#2D3748] flex items-center justify-center text-white shadow-lg shadow-gray-200/50 animate-float">
@@ -40,11 +40,11 @@ function Index() {
               <span className="text-xs font-semibold text-[#4A5568]">Personal Assistant v2.0</span>
             </div>
           </div>
-          <h1 className="text-5xl font-serif font-medium text-[#1A202C] tracking-tight print:hidden text-gradient">Timeline</h1>
+          <h1 className="text-4xl md:text-5xl font-serif font-medium text-[#1A202C] tracking-tight print:hidden text-gradient">Timeline</h1>
           <h1 className="hidden print:block text-4xl font-serif font-medium text-[#1A202C] tracking-tight">Executive Schedule</h1>
 
-          <div className="flex items-center gap-4 mt-3">
-            <p className="text-[#718096] text-xl font-light">{format(currentSelectedDate, "EEEE, MMMM do")}</p>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 mt-3">
+            <p className="text-[#718096] text-lg md:text-xl font-light">{format(currentSelectedDate, "EEEE, MMMM do")}</p>
             <div className="flex items-center bg-white border border-[#EDF2F7] rounded-lg shadow-sm px-1 py-0.5 print:hidden">
               <button 
                 onClick={handlePrevDay}
@@ -95,9 +95,13 @@ function Index() {
           </div>
         </div>
         
-        <div className="flex items-center gap-3 print:hidden">
-          <SharePanel />
-          <AddEventModal />
+        <div className="flex items-center gap-2 md:gap-3 print:hidden w-full md:w-auto">
+          <div className="flex-1 md:flex-none">
+            <SharePanel />
+          </div>
+          <div className="flex-1 md:flex-none">
+            <AddEventModal />
+          </div>
           <Settings />
         </div>
 
