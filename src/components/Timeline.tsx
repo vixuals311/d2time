@@ -395,53 +395,52 @@ export function Timeline() {
       </SortableContext>
       
       {/* Tabular Print View for main Timeline */}
-      <div className="hidden print:block w-full overflow-hidden border border-[#E2E8F0] rounded-lg bg-white mt-8">
+      <div className="hidden print:block w-full bg-white font-sans text-[#1A202C]">
+        <div className="mb-8 border-b-2 border-[#1A202C] pb-6">
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-3xl font-bold uppercase tracking-tighter mb-1">Daily Schedule</h1>
+              <p className="text-lg text-[#4A5568]">{format(parseISO(selectedDate), "EEEE, MMMM do, yyyy")}</p>
+            </div>
+            <div className="text-right">
+              {profile.name && <h2 className="text-xl font-bold">{profile.name}</h2>}
+              {profile.position && <p className="text-sm text-[#718096] uppercase tracking-widest">{profile.position}</p>}
+              {profile.company && <p className="text-xs text-[#A0AEC0]">{profile.company}</p>}
+            </div>
+          </div>
+        </div>
+
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-[#F7FAFC] border-b border-[#E2E8F0]">
-              <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-[#4A5568]">Time</th>
-              <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-[#4A5568]">Event</th>
-              <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-[#4A5568]">Location</th>
-              <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-[#4A5568]">Details</th>
+            <tr className="border-b-2 border-[#1A202C]">
+              <th className="py-4 text-sm font-bold uppercase tracking-wider w-[15%]">Time</th>
+              <th className="px-4 py-4 text-sm font-bold uppercase tracking-wider w-[25%]">Event</th>
+              <th className="px-4 py-4 text-sm font-bold uppercase tracking-wider w-[25%]">Location</th>
+              <th className="px-4 py-4 text-sm font-bold uppercase tracking-wider w-[35%]">Notes / Details</th>
             </tr>
           </thead>
           <tbody>
             {events.map((event) => {
               const start = parseISO(event.startTime);
-              const end = addMinutes(start, event.durationMinutes);
-              const typeStyles = {
-                meeting: 'bg-[#EBF8FF] text-[#2B6CB0] border-[#BEE3F8]',
-                visit: 'bg-[#F0FFF4] text-[#2F855A] border-[#C6F6D5]',
-                guest: 'bg-[#FAF5FF] text-[#6B46C1] border-[#E9D8FD]',
-                break: 'bg-[#FFF5F5] text-[#C53030] border-[#FED7D7]',
-                unavailable: 'bg-[#EDF2F7] text-[#4A5568] border-[#E2E8F0]',
-              };
               return (
-                <tr key={event.id} className="border-b border-[#E2E8F0] last:border-0">
-                  <td className="px-4 py-4 whitespace-nowrap align-top">
-                    <div className="text-sm font-semibold text-[#2D3748]">{format(start, "h:mm a")}</div>
-                    <div className="text-[10px] text-[#A0AEC0]">{event.durationMinutes} min</div>
+                <tr key={event.id} className="border-b border-[#E2E8F0]">
+                  <td className="py-5 align-top">
+                    <div className="text-sm font-bold">{format(start, "h:mm a")}</div>
+                    <div className="text-[10px] text-[#A0AEC0] font-medium uppercase tracking-tight">{event.durationMinutes}m duration</div>
                   </td>
-                  <td className="px-4 py-4 align-top">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className={cn(
-                        "inline-block px-1.5 py-0.5 rounded text-[8px] font-bold uppercase border",
-                        typeStyles[event.type]
-                      )}>
-                        {event.type}
-                      </span>
-                    </div>
-                    <div className="text-sm font-bold text-[#1A202C]">{event.title}</div>
+                  <td className="px-4 py-5 align-top">
+                    <div className="text-[9px] font-bold uppercase text-[#718096] mb-1 tracking-widest">{event.type}</div>
+                    <div className="text-sm font-bold leading-tight">{event.title}</div>
                   </td>
-                  <td className="px-4 py-4 align-top text-sm text-[#4A5568]">
+                  <td className="px-4 py-5 align-top text-sm text-[#4A5568]">
                     {event.location || '-'}
                   </td>
-                  <td className="px-4 py-4 align-top text-xs text-[#718096]">
+                  <td className="px-4 py-5 align-top">
                     {event.attendees && event.attendees.length > 0 && (
-                      <div className="mb-1">{event.attendees.length} people</div>
+                      <div className="text-[10px] text-[#718096] mb-1 font-medium">Guests: {event.attendees.length}</div>
                     )}
                     {event.description && (
-                      <div className="italic text-[#A0AEC0] line-clamp-3">{event.description}</div>
+                      <div className="text-xs text-[#4A5568] leading-relaxed">{event.description}</div>
                     )}
                   </td>
                 </tr>
@@ -449,6 +448,10 @@ export function Timeline() {
             })}
           </tbody>
         </table>
+        
+        <div className="mt-12 pt-8 border-t border-[#EDF2F7] text-center">
+          <p className="text-[10px] text-[#CBD5E0] uppercase tracking-[0.3em]">Generated via Executive Timeline Manager</p>
+        </div>
       </div>
 
       <DragOverlay adjustScale={false} dropAnimation={{
