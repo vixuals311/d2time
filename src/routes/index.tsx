@@ -1,13 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Plus, Share2, Calendar as CalendarIcon, Settings as SettingsIcon, ChevronLeft, ChevronRight } from "lucide-react";
+import { Plus, Share2, Calendar as CalendarIcon, Settings as SettingsIcon, ChevronLeft, ChevronRight, CalendarDays } from "lucide-react";
 import { useTimelineStore } from "../lib/store";
-import { format, addDays, parseISO } from "date-fns";
+import { format, addDays, parseISO, startOfDay } from "date-fns";
 import { Timeline } from "../components/Timeline";
 import { AddEventModal } from "../components/AddEventModal";
 import { SharePanel } from "../components/SharePanel";
 import { Settings } from "../components/Settings";
 import { useReminders } from "../lib/useReminders";
 import { Toaster } from "sonner";
+import { Calendar } from "../components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "../components/ui/popover";
+import { cn } from "../lib/utils";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -47,12 +50,36 @@ function Index() {
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
+              
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button 
+                    className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[#4A5568] hover:bg-[#F7FAFC] rounded transition-colors flex items-center gap-1.5"
+                  >
+                    <CalendarDays className="h-3 w-3" />
+                    Pick Date
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={currentSelectedDate}
+                    onSelect={(date) => date && setSelectedDate(date)}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+
               <button 
                 onClick={handleToday}
-                className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[#4A5568] hover:bg-[#F7FAFC] rounded transition-colors"
+                className={cn(
+                  "px-2 py-1 text-[10px] font-bold uppercase tracking-wider hover:bg-[#F7FAFC] rounded transition-colors",
+                  format(new Date(), "yyyy-MM-dd") === selectedDate ? "text-[#2D3748] bg-[#F7FAFC]" : "text-[#718096]"
+                )}
               >
                 Today
               </button>
+
               <button 
                 onClick={handleNextDay}
                 className="p-1 hover:bg-[#F7FAFC] rounded transition-colors text-[#718096]"
