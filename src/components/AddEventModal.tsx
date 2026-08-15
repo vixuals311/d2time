@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
+import { parse } from "date-fns";
 import {
   Dialog,
   DialogContent,
@@ -25,6 +26,7 @@ export function AddEventModal() {
   const [open, setOpen] = useState(false);
   const addEvent = useTimelineStore((state) => state.addEvent);
   const bufferMinutes = useTimelineStore((state) => state.bufferMinutes);
+  const workingHours = useTimelineStore((state) => state.workingHours);
 
   const [formData, setFormData] = useState<{
     title: string;
@@ -47,20 +49,35 @@ export function AddEventModal() {
       return;
     }
 
-    addEvent({
+    const eventStart = new Date(formData.startTime);
+    const eventEnd = new Date(eventStart.getTime() + formData.durationMinutes * 60000);
+    const baseDate = format(eventStart, "yyyy-MM-dd");
+    const dayStart = parse(`${baseDate} ${workingHours.start}`, "yyyy-MM-dd HH:mm", new Date());
+    const dayEnd = parse(`${baseDate} ${workingHours.end}`, "yyyy-MM-dd HH:mm", new Date());
+
+    if (eventStart < dayStart || eventEnd > dayEnd) {
+      toast.error(`Event must be within working hours (${workingHours.start} - ${workingHours.end})`);
+      return;
+    }
+
+    const success = addEvent({
       ...formData,
       durationMinutes: Number(formData.durationMinutes),
     });
 
-    toast.success("Event added to timeline");
-    setOpen(false);
-    setFormData({
-      title: "",
-      startTime: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
-      durationMinutes: 30,
-      type: "meeting",
-      location: "",
-    });
+    if (success) {
+      toast.success("Event added to timeline");
+      setOpen(false);
+      setFormData({
+        title: "",
+        startTime: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
+        durationMinutes: 30,
+        type: "meeting",
+        location: "",
+      });
+    } else {
+      toast.error("Time clash detected! Please choose a different time.");
+    }
   };
 
   return (
@@ -144,6 +161,7 @@ export function AddEventModal() {
                     <SelectItem value="visit">Visit</SelectItem>
                     <SelectItem value="guest">Guest</SelectItem>
                     <SelectItem value="break">Break</SelectItem>
+                    <SelectItem value="unavailable">Unavailable</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
