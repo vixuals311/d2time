@@ -90,7 +90,7 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
     >
       <div className="flex gap-4 md:gap-8">
         {/* Time Column */}
-        <div className="w-16 md:w-20 pt-1 text-right flex-shrink-0">
+        <div className="w-20 md:w-24 pt-1 text-right flex-shrink-0 pr-4 md:pr-6">
           <div className={cn(
             "text-[10px] md:text-xs font-bold tracking-tight",
             isEventPast ? "text-[#A0AEC0]" : "text-[#2D3748]"
@@ -355,7 +355,7 @@ export function Timeline() {
       <SortableContext items={events.map((e) => e.id)} strategy={verticalListSortingStrategy}>
         <div className="relative pl-0 md:pl-4 pb-12 print:hidden">
           {/* Vertical line - premium gradient */}
-          <div className="absolute left-[85px] md:left-[100px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-[#EDF2F7] via-[#CBD5E0] to-[#EDF2F7] -z-10 opacity-50" />
+          <div className="absolute left-[100px] md:left-[116px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-[#EDF2F7] via-[#CBD5E0] to-[#EDF2F7] -z-10 opacity-50" />
           
           {events.map((event, index) => {
             const startTime = new Date(event.startTime);
@@ -366,7 +366,7 @@ export function Timeline() {
               <div key={event.id} className="relative">
                 {isNow && (
                   <div className="absolute left-0 right-0 -top-8 flex items-center gap-4 z-20 print:hidden">
-                     <div className="w-16 md:w-20 text-right text-[9px] font-bold text-[#E53E3E] uppercase tracking-[0.2em] animate-pulse">Now</div>
+                     <div className="w-20 md:w-24 text-right text-[9px] font-bold text-[#E53E3E] uppercase tracking-[0.2em] animate-pulse pr-4 md:pr-6">Now</div>
                      <div className="h-2 w-2 rounded-full bg-[#E53E3E] shadow-[0_0_10px_rgba(229,62,62,0.5)] animate-pulse" />
                      <div className="h-[1px] flex-1 bg-gradient-to-r from-[#E53E3E] to-transparent opacity-20" />
                   </div>
@@ -378,7 +378,7 @@ export function Timeline() {
 
           {/* Quick Add at the bottom */}
           <div className="flex gap-4 md:gap-8 items-center mt-4 print:hidden">
-             <div className="w-16 md:w-20 invisible" />
+             <div className="w-20 md:w-24 invisible" />
              <div className="relative flex-1">
                 <div className="absolute -left-[29px] md:-left-[43px] top-1/2 -translate-y-1/2 h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-[#EDF2F7] border border-[#CBD5E0]" />
                 <AddEventModal 
