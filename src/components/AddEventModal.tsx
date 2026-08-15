@@ -26,11 +26,18 @@ export function AddEventModal() {
   const addEvent = useTimelineStore((state) => state.addEvent);
   const bufferMinutes = useTimelineStore((state) => state.bufferMinutes);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    title: string;
+    startTime: string;
+    durationMinutes: number;
+    type: EventType;
+    location: string;
+  }>({
     title: "",
     startTime: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
     durationMinutes: 30,
-    type: "meeting" as EventType,
+    type: "meeting",
+    location: "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -52,6 +59,7 @@ export function AddEventModal() {
       startTime: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
       durationMinutes: 30,
       type: "meeting",
+      location: "",
     });
   };
 
@@ -108,24 +116,36 @@ export function AddEventModal() {
                 />
               </div>
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="type">Event Type</Label>
-              <Select
-                value={formData.type}
-                onValueChange={(v: EventType) =>
-                  setFormData((prev) => ({ ...prev, type: v }))
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="meeting">Meeting</SelectItem>
-                  <SelectItem value="visit">Visit</SelectItem>
-                  <SelectItem value="guest">Guest</SelectItem>
-                  <SelectItem value="break">Break</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="location">Location</Label>
+                <Input
+                  id="location"
+                  placeholder="Main Hall"
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, location: e.target.value }))
+                  }
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="type">Event Type</Label>
+                <Select
+                  value={formData.type}
+                  onValueChange={(v: EventType) =>
+                    setFormData((prev) => ({ ...prev, type: v }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="meeting">Meeting</SelectItem>
+                    <SelectItem value="visit">Visit</SelectItem>
+                    <SelectItem value="guest">Guest</SelectItem>
+                    <SelectItem value="break">Break</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <p className="text-xs text-muted-foreground italic">
               * A {bufferMinutes}m buffer will be visually added after this event.
