@@ -247,7 +247,7 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
 }
 
 export function Timeline() {
-  const { events: allEvents, bufferMinutes, setEvents, workingHours, selectedDate } = useTimelineStore();
+  const { events: allEvents, bufferMinutes, setEvents, workingHours, selectedDate, profile } = useTimelineStore();
   const [currentTime, setCurrentTime] = useState(new Date());
   const [activeId, setActiveId] = useState<string | null>(null);
 
