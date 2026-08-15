@@ -106,22 +106,45 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
         <div className="relative flex-1">
           {/* Connector Dot */}
           <div className={cn(
-            "absolute -left-[31px] md:-left-[45px] top-3 h-2.5 w-2.5 md:h-3 md:w-3 rounded-full border-2 bg-white z-10 transition-transform group-hover:scale-125",
-            isEventPast ? "border-[#CBD5E0]" : "border-[#2D3748] shadow-[0_0_0_4px_rgba(45,55,72,0.1)]"
+            "absolute -left-[32px] md:-left-[46px] top-5 h-4 w-4 rounded-full border-2 bg-white z-10 transition-transform group-hover:scale-110",
+            isEventPast ? "border-[#CBD5E0]" : "border-[#3B82F6] shadow-[0_0_0_4px_rgba(59,130,246,0.1)]"
           )} />
 
           <div
             className={cn(
-              "relative flex items-center gap-2 md:gap-5 rounded-xl md:rounded-[2rem] bg-white p-3 md:p-6 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.03)] border border-transparent hover:border-[#E2E8F0] hover:shadow-[0_20px_40px_-8px_rgba(0,0,0,0.06)] transition-all duration-500",
+              "relative flex items-center gap-2 md:gap-5 rounded-[1.5rem] bg-white p-4 md:p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] border border-[#E2E8F0] hover:shadow-[0_20px_40px_-8px_rgba(0,0,0,0.08)] transition-all duration-500",
             )}
           >
-            <button
-              {...attributes}
-              {...listeners}
-              className="p-1 md:p-2 -ml-2 text-[#CBD5E0] hover:text-[#A0AEC0] hover:bg-[#F7FAFC] rounded-lg transition-all print:hidden touch-none"
-            >
-              <GripVertical className="h-5 w-5" />
-            </button>
+            <div className="absolute right-4 top-4 flex flex-col gap-2 print:hidden">
+              <button
+                onClick={() => {
+                  const fmt = (d: Date) => format(d, "yyyyMMdd'T'HHmmss'Z'");
+                  const gCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${fmt(startTime)}/${fmt(endTime)}${event.location ? `&location=${encodeURIComponent(event.location)}` : ''}`;
+                  window.open(gCalUrl, '_blank');
+                }}
+                className="p-1.5 text-[#A0AEC0] hover:text-[#4A5568] transition-colors"
+                title="Add to Calendar"
+              >
+                <Calendar className="h-4 w-4" />
+              </button>
+              <button
+                onClick={() => setIsEditOpen(true)}
+                className="p-1.5 text-[#A0AEC0] hover:text-[#4A5568] transition-colors"
+                title="Edit"
+              >
+                <Edit3 className="h-4 w-4" />
+              </button>
+              <button
+                onClick={() => {
+                  removeEvent(event.id);
+                  toast.info("Event removed");
+                }}
+                className="p-1.5 text-[#A0AEC0] hover:text-[#F56565] transition-colors"
+                title="Delete"
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </div>
 
             <div className="flex-1">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-1.5 md:mb-2 gap-2">
@@ -160,70 +183,13 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
               )}
             </div>
 
-            <div className="flex flex-col md:flex-row items-center gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-all print:hidden">
-              <button
-                onClick={() => {
-                  const fmt = (d: Date) => format(d, "yyyyMMdd'T'HHmmss'Z'");
-                  const gCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${fmt(startTime)}/${fmt(endTime)}${event.location ? `&location=${encodeURIComponent(event.location)}` : ''}`;
-                  window.open(gCalUrl, '_blank');
-                }}
-                className="p-1.5 md:p-2 text-[#718096] hover:bg-[#F7FAFC] rounded-lg transition-all"
-                title="Add to Google Calendar"
-              >
-                <Calendar className="h-3.5 w-3.5 md:h-4 md:w-4" />
-              </button>
+            {/* Drag Handle at the left side */}
+            <div 
+              {...attributes} 
+              {...listeners}
+              className="absolute -left-2 top-0 bottom-0 w-4 cursor-grab active:cursor-grabbing print:hidden"
+            />
 
-              <button
-                onClick={() => setIsEditOpen(true)}
-                className="p-2 text-[#718096] hover:bg-[#F7FAFC] rounded-lg transition-all"
-                title="Edit Event"
-              >
-                <Edit3 className="h-4 w-4" />
-              </button>
-
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button className="p-1.5 md:p-2 text-[#718096] hover:bg-[#F7FAFC] rounded-lg transition-all">
-                    <Share2 className="h-3.5 w-3.5 md:h-4 md:w-4" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => {
-                    const url = new URL(window.location.href);
-                    url.searchParams.set('event', event.id);
-                    navigator.clipboard.writeText(url.toString());
-                    toast.success("Event link copied");
-                  }}>
-                    <Share2 className="mr-2 h-4 w-4" /> Share Link
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => {
-                    const profileInfo = profile.name 
-                      ? `${profile.name}${profile.position ? ` (${profile.position}${profile.company ? ` at ${profile.company}` : ''})` : ''}`
-                      : 'High-Profile Individual';
-                    
-                    // Compact GCal URL
-                    const gCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${format(startTime, "yyyyMMdd'T'HHmmss'Z'")}/${format(endTime, "yyyyMMdd'T'HHmmss'Z'")}${event.location ? `&location=${encodeURIComponent(event.location)}` : ''}`;
-
-                    const message = `Dear Guest,\n\nYou have a ${event.type} today with ${profileInfo}.\n\nTime: ${format(startTime, "h:mm a")} - ${format(endTime, "h:mm a")}\nLocation: ${event.location || 'Not specified'}\n\nAdd to calendar: ${gCalUrl}`;
-                    
-                    navigator.clipboard.writeText(message);
-                    toast.success("Comprehensive event message copied");
-                  }}>
-                    <Copy className="mr-2 h-4 w-4" /> Copy Info
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <button
-                onClick={() => {
-                  removeEvent(event.id);
-                  toast.info("Event removed");
-                }}
-                className="p-1.5 md:p-2 text-[#FC8181] hover:bg-[#FFF5F5] rounded-lg transition-all"
-              >
-                <Trash2 className="h-3.5 w-3.5 md:h-4 md:w-4" />
-              </button>
-            </div>
           </div>
 
           {/* Buffer Indicator */}
