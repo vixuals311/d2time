@@ -25,10 +25,15 @@ export function SharePanel() {
 
   const exportPDF = () => {
     toast.loading("Preparing print view...", { id: "pdf-gen" });
-    // Use window.print() for faster, higher quality PDF generation
-    window.print();
-    toast.dismiss("pdf-gen");
-    toast.success("Print dialog opened");
+    // Use a small delay to ensure the dialog closes visually if needed, 
+    // although standard window.print() blocks the main thread.
+    // The problem reported is that it prints the dialog. 
+    // We should close the dialog or hide it via print CSS.
+    setTimeout(() => {
+      window.print();
+      toast.dismiss("pdf-gen");
+      toast.success("Print dialog opened");
+    }, 100);
   };
 
   return (
