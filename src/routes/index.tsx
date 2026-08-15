@@ -28,9 +28,26 @@ function Index() {
   const handleToday = () => setSelectedDate(new Date());
 
   return (
-    <div className="min-h-screen bg-background px-4 py-6 md:px-12 md:py-16 font-sans selection:bg-accent">
+    <div className="min-h-screen bg-background px-4 py-6 md:px-12 md:py-16 font-sans selection:bg-accent relative">
       <Toaster position="top-center" richColors />
       
+      <div className="absolute top-6 right-4 md:top-10 md:right-12 flex items-center gap-2 md:gap-3 print:hidden z-10">
+        <button
+          onClick={toggleTheme}
+          className="flex h-9 w-9 items-center justify-center rounded-xl bg-card text-foreground shadow-sm border border-border hover:bg-accent transition-all"
+          title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+        >
+          {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+        </button>
+        <Link 
+          to="/settings"
+          className="flex h-9 w-9 items-center justify-center rounded-xl bg-card text-foreground shadow-sm border border-border hover:bg-accent transition-all"
+          title="Settings"
+        >
+          <SettingsIcon className="h-4 w-4" />
+        </Link>
+      </div>
+
       <header className="mx-auto max-w-4xl mb-12 md:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8 print:hidden">
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-4">
