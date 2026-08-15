@@ -30,6 +30,16 @@ export function AddEventModal() {
   const bufferMinutes = useTimelineStore((state) => state.bufferMinutes);
   const workingHours = useTimelineStore((state) => state.workingHours);
   const durationOptions = useTimelineStore((state) => state.durationOptions);
+  const selectedDate = useTimelineStore((state) => state.selectedDate);
+
+  const initialDate = () => {
+    const now = new Date();
+    const currentSelected = parseISO(selectedDate);
+    if (startOfDay(currentSelected) > startOfDay(now)) {
+      return parse(`${format(currentSelected, "yyyy-MM-dd")} ${workingHours.start}`, "yyyy-MM-dd HH:mm", new Date());
+    }
+    return startOfMinute(now);
+  };
 
   const [formData, setFormData] = useState<{
     title: string;
@@ -39,11 +49,18 @@ export function AddEventModal() {
     location: string;
   }>({
     title: "",
-    startDate: startOfMinute(new Date()),
+    startDate: initialDate(),
     durationMinutes: 30,
     type: "meeting",
     location: "",
   });
+
+  const handleOpenChange = (isOpen: boolean) => {
+    setOpen(isOpen);
+    if (isOpen) {
+      setFormData(prev => ({ ...prev, startDate: initialDate() }));
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

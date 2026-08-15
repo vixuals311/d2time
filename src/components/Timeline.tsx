@@ -196,27 +196,29 @@ export function Timeline() {
       const oldIndex = events.findIndex((e) => e.id === active.id);
       const newIndex = events.findIndex((e) => e.id === over.id);
       
-      const newEvents = arrayMove(events, oldIndex, newIndex);
+      const newEventsOrder = arrayMove(events, oldIndex, newIndex);
+      
+      // Merge back with other days' events
+      const otherDaysEvents = allEvents.filter(e => startOfDay(parseISO(e.startTime)).toISOString() !== selectedDate);
       
       // Update times based on new order and buffer
-      const firstEvent = newEvents[0];
+      const firstEvent = newEventsOrder[0];
       if (!firstEvent) return;
       let currentTime = new Date(firstEvent.startTime);
-      const updatedEvents = newEvents.map((e, idx) => {
+      const updatedEventsForDay = newEventsOrder.map((e, idx) => {
         const start = idx === 0 ? currentTime : addMinutes(currentTime, bufferMinutes);
         const updated = { ...e, startTime: start.toISOString() };
         currentTime = addMinutes(start, e.durationMinutes);
         return updated;
       });
 
-      // Check if the new sequence clashes (it shouldn't logically overlap itself, 
-      // but we might want to check against working hours)
+      // Check if the new sequence clashes against working hours
       const baseDate = format(new Date(firstEvent.startTime), "yyyy-MM-dd");
       const dayStart = parse(`${baseDate} ${workingHours.start}`, "yyyy-MM-dd HH:mm", new Date());
       const dayEnd = parse(`${baseDate} ${workingHours.end}`, "yyyy-MM-dd HH:mm", new Date());
 
-      const firstStart = new Date(updatedEvents[0]!.startTime);
-      const lastEventItem = updatedEvents[updatedEvents.length - 1];
+      const firstStart = new Date(updatedEventsForDay[0]!.startTime);
+      const lastEventItem = updatedEventsForDay[updatedEventsForDay.length - 1];
       
       if (lastEventItem) {
         const lastEnd = addMinutes(new Date(lastEventItem.startTime), lastEventItem.durationMinutes);
@@ -226,7 +228,7 @@ export function Timeline() {
         }
       }
 
-      setEvents(updatedEvents);
+      setEvents([...otherDaysEvents, ...updatedEventsForDay]);
       toast.success("Schedule reordered");
     }
   }
