@@ -161,7 +161,7 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
               )}
             </div>
 
-            <div className="flex flex-col md:flex-row items-center gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-all print:hidden">
+            <div className="flex flex-col md:flex-row items-center gap-1 transition-all print:hidden">
               <button
                 onClick={() => {
                   const fmt = (d: Date) => format(d, "yyyyMMdd'T'HHmmss'Z'");
@@ -217,8 +217,10 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
 
               <button
                 onClick={() => {
-                  removeEvent(event.id);
-                  toast.info("Event removed");
+                  if (window.confirm("Are you sure you want to remove this event?")) {
+                    removeEvent(event.id);
+                    toast.info("Event removed");
+                  }
                 }}
                 className="p-1.5 md:p-2 text-[#FC8181] hover:bg-[#FFF5F5] rounded-lg transition-all"
               >
