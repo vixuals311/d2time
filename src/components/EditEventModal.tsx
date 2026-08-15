@@ -5,7 +5,7 @@ import { Label } from "./ui/label";
 import { useTimelineStore, TimelineEvent } from "../lib/store";
 import { toast } from "sonner";
 import DatePicker from "react-datepicker";
-import { parseISO } from "date-fns";
+import { parseISO, addMinutes } from "date-fns";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -41,10 +41,28 @@ export function EditEventModal({ event, open, onOpenChange }: Props) {
     }
   }, [open, event]);
 
-  const updateEvent = useTimelineStore((state) => state.updateEvent);
+  const { updateEvent, bufferMinutes, events } = useTimelineStore();
 
   const handleSubmit = (e?: React.FormEvent, force = false) => {
     e?.preventDefault();
+    
+    // Manual check for clash to show dialog if not force
+    if (!force) {
+      const updatedStart = formData.startDate;
+      const updatedEnd = addMinutes(updatedStart, formData.durationMinutes + bufferMinutes);
+      
+      const hasClash = events.filter(e => e.id !== event.id).some(e => {
+        const eStart = parseISO(e.startTime);
+        const eEnd = addMinutes(eStart, e.durationMinutes + bufferMinutes);
+        return updatedStart < eEnd && updatedEnd > eStart;
+      });
+      
+      if (hasClash) {
+        setShowClashDialog(true);
+        return;
+      }
+    }
+
     const success = updateEvent(event.id, {
       title: formData.title,
       startTime: formData.startDate.toISOString(),
@@ -55,8 +73,8 @@ export function EditEventModal({ event, open, onOpenChange }: Props) {
       toast.success(force ? "Schedule shifted and updated" : "Event updated");
       onOpenChange(false);
       setShowClashDialog(false);
-    } else if (!force) {
-      setShowClashDialog(true);
+    } else {
+      toast.error("Could not update event");
     }
   };
 
