@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Share2, Link as LinkIcon, FileText, Check } from "lucide-react";
 import {
   Dialog,
@@ -12,6 +12,7 @@ import { useTimelineStore } from "../lib/store";
 
 export function SharePanel() {
   const [copied, setCopied] = useState(false);
+  const [open, setOpen] = useState(false);
   const selectedDate = useTimelineStore((state) => state.selectedDate);
 
   const copyLink = () => {
@@ -25,19 +26,23 @@ export function SharePanel() {
 
   const exportPDF = () => {
     toast.loading("Preparing print view...", { id: "pdf-gen" });
-    // Use a small delay to ensure the dialog closes visually if needed, 
-    // although standard window.print() blocks the main thread.
-    // The problem reported is that it prints the dialog. 
-    // We should close the dialog or hide it via print CSS.
+    
+    // Close the dialog first so it's not in the print view
+    setOpen(false);
+
+    // Give the browser time to remove the dialog from the DOM
     setTimeout(() => {
       window.print();
       toast.dismiss("pdf-gen");
       toast.success("Print dialog opened");
-    }, 100);
+    }, 300);
   };
 
   return (
-    <Dialog>
+    <Dialog onOpenChange={(open) => {
+      // Ensure the toast from a previous print attempt is dismissed when re-opening
+      if (open) toast.dismiss("pdf-gen");
+    }}>
       <DialogTrigger asChild>
         <button className="flex items-center gap-2 rounded-2xl bg-white px-5 py-2.5 text-sm font-semibold text-[#4A5568] shadow-[0_2px_10px_-2px_rgba(0,0,0,0.05)] border border-[#EDF2F7] hover:bg-[#F7FAFC] transition-all">
           <Share2 className="h-4 w-4" /> Share Schedule
