@@ -15,11 +15,17 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { format, addMinutes } from 'date-fns';
-import { GripVertical, Clock, MapPin, Users, Trash2 } from 'lucide-react';
+import { format, addMinutes, parseISO } from 'date-fns';
+import { GripVertical, Clock, MapPin, Users, Trash2, Share2, Copy, Calendar } from 'lucide-react';
 import { useTimelineStore, TimelineEvent } from '../lib/store';
 import { cn } from '../lib/utils';
 import { toast } from 'sonner';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 
 interface SortableEventItemProps {
   event: TimelineEvent;
@@ -52,6 +58,7 @@ function SortableEventItem({ event, bufferMinutes }: SortableEventItemProps) {
     visit: 'bg-[#F0FFF4] text-[#38A169] border-[#C6F6D5]',
     guest: 'bg-[#FAF5FF] text-[#805AD5] border-[#E9D8FD]',
     break: 'bg-[#FFF5F5] text-[#E53E3E] border-[#FED7D7]',
+    unavailable: 'bg-[#EDF2F7] text-[#4A5568] border-[#E2E8F0]',
   };
 
   return (
@@ -105,15 +112,49 @@ function SortableEventItem({ event, bufferMinutes }: SortableEventItemProps) {
           )}
         </div>
 
-        <button
-          onClick={() => {
-            removeEvent(event.id);
-            toast.info("Event removed");
-          }}
-          className="opacity-0 group-hover:opacity-100 p-2 text-[#FC8181] hover:bg-[#FFF5F5] rounded-lg transition-all"
-        >
-          <Trash2 className="h-4 w-4" />
-        </button>
+        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="p-2 text-[#718096] hover:bg-[#F7FAFC] rounded-lg transition-all">
+                <Share2 className="h-4 w-4" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => {
+                const url = new URL(window.location.href);
+                url.searchParams.set('event', event.id);
+                navigator.clipboard.writeText(url.toString());
+                toast.success("Event link copied");
+              }}>
+                <Share2 className="mr-2 h-4 w-4" /> Share Link
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => {
+                const text = `${event.title}\n${format(startTime, "h:mm a")} - ${format(endTime, "h:mm a")}\n${event.location || ''}`;
+                navigator.clipboard.writeText(text);
+                toast.success("Event info copied");
+              }}>
+                <Copy className="mr-2 h-4 w-4" /> Copy Info
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => {
+                const fmt = (d: Date) => format(d, "yyyyMMdd'T'HHmmss'Z'");
+                const gCalUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${fmt(startTime)}/${fmt(endTime)}&details=${encodeURIComponent(event.description || '')}&location=${encodeURIComponent(event.location || '')}`;
+                window.open(gCalUrl, '_blank');
+              }}>
+                <Calendar className="mr-2 h-4 w-4" /> Add to GCal
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <button
+            onClick={() => {
+              removeEvent(event.id);
+              toast.info("Event removed");
+            }}
+            className="p-2 text-[#FC8181] hover:bg-[#FFF5F5] rounded-lg transition-all"
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
+        </div>
       </div>
 
       {/* Buffer Indicator */}

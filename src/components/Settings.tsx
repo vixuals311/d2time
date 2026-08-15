@@ -5,7 +5,7 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 
 export function Settings() {
-  const { bufferMinutes, setBufferMinutes } = useTimelineStore();
+  const { bufferMinutes, setBufferMinutes, workingHours, setWorkingHours } = useTimelineStore();
 
   return (
     <Popover>
@@ -29,8 +29,28 @@ export function Settings() {
               className="h-8 text-xs"
             />
           </div>
+          <div className="grid gap-2">
+            <Label htmlFor="dayStart" className="text-xs">Day Start Time</Label>
+            <Input
+              id="dayStart"
+              type="time"
+              value={workingHours.start}
+              onChange={(e) => setWorkingHours({ ...workingHours, start: e.target.value })}
+              className="h-8 text-xs"
+            />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="dayEnd" className="text-xs">Day End Time</Label>
+            <Input
+              id="dayEnd"
+              type="time"
+              value={workingHours.end}
+              onChange={(e) => setWorkingHours({ ...workingHours, end: e.target.value })}
+              className="h-8 text-xs"
+            />
+          </div>
           <p className="text-[10px] text-muted-foreground">
-            Buffers are automatically added between events when reordering.
+            Buffers are automatically added between events when reordering. Clash prevention is active.
           </p>
         </div>
       </PopoverContent>

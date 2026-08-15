@@ -47,20 +47,24 @@ export function AddEventModal() {
       return;
     }
 
-    addEvent({
+    const success = addEvent({
       ...formData,
       durationMinutes: Number(formData.durationMinutes),
     });
 
-    toast.success("Event added to timeline");
-    setOpen(false);
-    setFormData({
-      title: "",
-      startTime: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
-      durationMinutes: 30,
-      type: "meeting",
-      location: "",
-    });
+    if (success) {
+      toast.success("Event added to timeline");
+      setOpen(false);
+      setFormData({
+        title: "",
+        startTime: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
+        durationMinutes: 30,
+        type: "meeting",
+        location: "",
+      });
+    } else {
+      toast.error("Time clash detected! Please choose a different time.");
+    }
   };
 
   return (
@@ -144,6 +148,7 @@ export function AddEventModal() {
                     <SelectItem value="visit">Visit</SelectItem>
                     <SelectItem value="guest">Guest</SelectItem>
                     <SelectItem value="break">Break</SelectItem>
+                    <SelectItem value="unavailable">Unavailable</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
