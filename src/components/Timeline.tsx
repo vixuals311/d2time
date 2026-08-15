@@ -332,9 +332,9 @@ export function Timeline() {
               <div key={event.id} className="relative">
                 {isNow && (
                   <div className="absolute left-0 right-0 -top-8 flex items-center gap-4 z-20 print:hidden">
-                     <div className="w-16 md:w-20 text-right text-[9px] font-bold text-[#E53E3E] uppercase tracking-[0.2em] animate-pulse">Now</div>
-                     <div className="h-2 w-2 rounded-full bg-[#E53E3E] shadow-[0_0_10px_rgba(229,62,62,0.5)] animate-pulse" />
-                     <div className="h-[1px] flex-1 bg-gradient-to-r from-[#E53E3E] to-transparent opacity-20" />
+                     <div className="w-16 md:w-20 text-right text-[9px] font-bold text-[#3B82F6] uppercase tracking-[0.2em] animate-pulse">Now</div>
+                     <div className="h-4 w-4 rounded-full bg-[#3B82F6] shadow-[0_0_10px_rgba(59,130,246,0.5)] border-4 border-white z-20 animate-pulse" />
+                     <div className="h-[2px] flex-1 bg-[#3B82F6] opacity-10" />
                   </div>
                 )}
                 <SortableEventItem event={event} bufferMinutes={bufferMinutes} index={index} />
