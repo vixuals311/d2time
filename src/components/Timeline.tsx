@@ -71,11 +71,11 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
   const Icon = typeIcons[event.type] || Clock;
 
   const typeStyles = {
-    meeting: 'bg-[#EBF8FF] text-[#2B6CB0] border-[#BEE3F8]',
-    visit: 'bg-[#F0FFF4] text-[#2F855A] border-[#C6F6D5]',
-    guest: 'bg-[#FAF5FF] text-[#6B46C1] border-[#E9D8FD]',
-    break: 'bg-[#FFF5F5] text-[#C53030] border-[#FED7D7]',
-    unavailable: 'bg-[#EDF2F7] text-[#4A5568] border-[#E2E8F0]',
+    meeting: 'bg-[#EBF8FF] text-[#2B6CB0] border-[#BEE3F8] border-l-[#2B6CB0]',
+    visit: 'bg-[#F0FFF4] text-[#2F855A] border-[#C6F6D5] border-l-[#2F855A]',
+    guest: 'bg-[#FAF5FF] text-[#6B46C1] border-[#E9D8FD] border-l-[#6B46C1]',
+    break: 'bg-[#FFF5F5] text-[#C53030] border-[#FED7D7] border-l-[#C53030]',
+    unavailable: 'bg-[#EDF2F7] text-[#4A5568] border-[#E2E8F0] border-l-[#4A5568]',
   };
 
   return (
@@ -112,7 +112,8 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
 
           <div
             className={cn(
-              "relative flex items-center gap-2 md:gap-5 rounded-xl md:rounded-[2rem] bg-white p-3 md:p-6 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.03)] border border-transparent hover:border-[#E2E8F0] hover:shadow-[0_20px_40px_-8px_rgba(0,0,0,0.06)] transition-all duration-500",
+              "relative flex items-center gap-2 md:gap-5 rounded-xl md:rounded-[2rem] bg-white p-3 md:p-6 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.03)] border border-transparent border-l-4 hover:border-[#E2E8F0] hover:border-l-4 hover:shadow-[0_20px_40px_-8px_rgba(0,0,0,0.06)] transition-all duration-500",
+              typeStyles[event.type]
             )}
           >
             <button
