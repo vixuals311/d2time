@@ -206,11 +206,13 @@ export function Timeline() {
 
       const firstStart = new Date(updatedEvents[0].startTime);
       const lastEventItem = updatedEvents[updatedEvents.length - 1];
-      const lastEnd = addMinutes(new Date(lastEventItem.startTime), lastEventItem.durationMinutes);
-
-      if (firstStart < dayStart || lastEnd > dayEnd) {
-        toast.error(`Schedule exceeds working hours (${workingHours.start} - ${workingHours.end})!`);
-        return;
+      
+      if (lastEventItem) {
+        const lastEnd = addMinutes(new Date(lastEventItem.startTime), lastEventItem.durationMinutes);
+        if (firstStart < dayStart || lastEnd > dayEnd) {
+          toast.error(`Schedule exceeds working hours (${workingHours.start} - ${workingHours.end})!`);
+          return;
+        }
       }
 
       setEvents(updatedEvents);
