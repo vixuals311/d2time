@@ -171,8 +171,8 @@ export function AddEventModal({ trigger }: { trigger?: React.ReactNode }) {
         {trigger !== undefined ? (
           trigger
         ) : (
-          <button className="flex items-center gap-2 rounded-xl bg-[#2D3748] px-4 py-2 text-sm font-medium text-white shadow-md hover:bg-[#1A202C] transition-all">
-            <Plus className="h-4 w-4" /> Add Event
+          <button className="flex w-full md:w-auto items-center justify-center gap-2 rounded-xl bg-[#2D3748] px-4 py-2 text-sm font-medium text-white shadow-md hover:bg-[#1A202C] transition-all">
+            <Plus className="h-4 w-4" /> <span className="md:inline">Add Event</span>
           </button>
         )}
       </DialogTrigger>
