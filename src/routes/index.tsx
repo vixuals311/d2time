@@ -75,15 +75,14 @@ function Index() {
                   </PopoverContent>
                 </Popover>
 
-                <button 
-                  onClick={handleToday}
-                  className={cn(
-                    "px-2 py-1 text-[10px] font-bold uppercase tracking-wider hover:bg-accent rounded-lg transition-colors",
-                    format(new Date(), "yyyy-MM-dd") === selectedDate ? "text-primary bg-accent" : "text-muted-foreground"
-                  )}
-                >
-                  Today
-                </button>
+                {format(new Date(), "yyyy-MM-dd") === selectedDate && (
+                  <button 
+                    onClick={handleToday}
+                    className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-primary bg-accent rounded-lg transition-colors"
+                  >
+                    Today
+                  </button>
+                )}
               </div>
 
               <button 
