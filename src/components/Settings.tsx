@@ -20,7 +20,9 @@ export function Settings() {
     workingHours, 
     setWorkingHours,
     durationOptions,
-    setDurationOptions
+    setDurationOptions,
+    profile,
+    setProfile
   } = useTimelineStore();
 
   const [open, setOpen] = useState(false);
@@ -29,19 +31,24 @@ export function Settings() {
   const [localBuffer, setLocalBuffer] = useState(bufferMinutes);
   const [localWorkingHours, setLocalWorkingHours] = useState(workingHours);
   const [localDurations, setLocalDurations] = useState(durationOptions);
+  const [localProfile, setLocalProfile] = useState(profile);
   const [newDuration, setNewDuration] = useState("");
 
   const hasChanges = 
     localBuffer !== bufferMinutes || 
     localWorkingHours.start !== workingHours.start || 
     localWorkingHours.end !== workingHours.end || 
-    JSON.stringify(localDurations.sort()) !== JSON.stringify([...durationOptions].sort());
+    JSON.stringify(localDurations.sort()) !== JSON.stringify([...durationOptions].sort()) ||
+    localProfile.name !== profile.name ||
+    localProfile.position !== profile.position ||
+    localProfile.company !== profile.company;
 
   const handleSave = () => {
     if (!hasChanges) return;
     setBufferMinutes(localBuffer);
     setWorkingHours(localWorkingHours);
     setDurationOptions([...localDurations].sort((a, b) => a - b));
+    setProfile(localProfile);
     toast.success("Settings saved successfully");
     setOpen(false);
   };
@@ -72,6 +79,7 @@ export function Settings() {
         setLocalBuffer(bufferMinutes);
         setLocalWorkingHours(workingHours);
         setLocalDurations(durationOptions);
+        setLocalProfile(profile);
       }
     }}>
       <DialogTrigger asChild>
@@ -84,6 +92,46 @@ export function Settings() {
           <DialogTitle className="text-lg font-semibold text-[#2D3748]">Schedule Settings</DialogTitle>
         </DialogHeader>
         <div className="space-y-6 py-4 max-h-[70vh] overflow-y-auto pr-2">
+          <div className="space-y-4">
+            <Label className="text-sm font-semibold text-[#2D3748] uppercase tracking-wider">High-Profile Individual Profile</Label>
+            <div className="grid gap-3">
+              <div className="grid gap-1.5">
+                <Label htmlFor="profile-name" className="text-xs">Full Name</Label>
+                <Input
+                  id="profile-name"
+                  value={localProfile.name}
+                  onChange={(e) => setLocalProfile({ ...localProfile, name: e.target.value })}
+                  placeholder="e.g. Elon Musk"
+                  className="h-9 rounded-xl"
+                />
+              </div>
+              <div className="grid gap-3 grid-cols-2">
+                <div className="grid gap-1.5">
+                  <Label htmlFor="profile-position" className="text-xs">Position</Label>
+                  <Input
+                    id="profile-position"
+                    value={localProfile.position}
+                    onChange={(e) => setLocalProfile({ ...localProfile, position: e.target.value })}
+                    placeholder="e.g. CEO"
+                    className="h-9 rounded-xl"
+                  />
+                </div>
+                <div className="grid gap-1.5">
+                  <Label htmlFor="profile-company" className="text-xs">Company</Label>
+                  <Input
+                    id="profile-company"
+                    value={localProfile.company}
+                    onChange={(e) => setLocalProfile({ ...localProfile, company: e.target.value })}
+                    placeholder="e.g. Tesla"
+                    className="h-9 rounded-xl"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="h-[1px] bg-[#EDF2F7]" />
+
           <div className="grid gap-2">
             <Label htmlFor="buffer" className="text-sm font-medium">Default Buffer (minutes)</Label>
             <Input
