@@ -177,22 +177,23 @@ export const useTimelineStore = create<TimelineState>()(
               continue;
             }
 
-            const [startH, startM] = state.workingHours.start.split(':').map(Number);
-            const [endH, endM] = state.workingHours.end.split(':').map(Number);
+            const [startH, startM] = state.workingHours.start.split(':').map(val => Number(val) || 0);
+            const [endH, endM] = state.workingHours.end.split(':').map(val => Number(val) || 0);
             
             let currentPointer = new Date(date);
-            currentPointer.setHours(startH, startM, 0, 0);
+            currentPointer.setHours(startH || 0, startM || 0, 0, 0);
             
             const endTimeLimit = new Date(date);
-            endTimeLimit.setHours(endH, endM, 0, 0);
+            endTimeLimit.setHours(endH || 0, endM || 0, 0, 0);
+
 
             // Add 3-5 events per day
             const numEvents = Math.floor(Math.random() * 3) + 3;
             
             for (let i = 0; i < numEvents; i++) {
-              const duration = durations[Math.floor(Math.random() * durations.length)];
-              const type = types[Math.floor(Math.random() * types.length)];
-              const title = titles[Math.floor(Math.random() * titles.length)];
+              const duration = durations[Math.floor(Math.random() * durations.length)] ?? 60;
+              const type = types[Math.floor(Math.random() * types.length)] ?? 'meeting';
+              const title = titles[Math.floor(Math.random() * titles.length)] ?? 'Meeting';
               
               const potentialEnd = addMinutes(currentPointer, duration + state.bufferMinutes);
               if (potentialEnd.getTime() <= endTimeLimit.getTime()) {
@@ -202,14 +203,15 @@ export const useTimelineStore = create<TimelineState>()(
                   startTime: currentPointer.toISOString(),
                   durationMinutes: duration,
                   type,
-                  location: locations[Math.floor(Math.random() * locations.length)],
+                  location: locations[Math.floor(Math.random() * locations.length)] ?? 'Conference Room',
                   description: `Generated random ${type} for testing purposes.`
                 });
                 
                 // Move pointer: duration + buffer + some random gap (0, 30, or 60 mins)
-                const gap = [0, 30, 60][Math.floor(Math.random() * 3)];
+                const gap = [0, 30, 60][Math.floor(Math.random() * 3)] ?? 0;
                 currentPointer = addMinutes(currentPointer, duration + state.bufferMinutes + gap);
               }
+
             }
           }
 
