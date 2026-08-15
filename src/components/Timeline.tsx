@@ -136,7 +136,7 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
                 </div>
                 <div className="flex items-center gap-2 text-[11px] font-medium text-[#A0AEC0]">
                   <Clock className="h-3 w-3" />
-                  {event.durationMinutes} min
+                  {format(startTime, "h:mm a")} - {format(endTime, "h:mm a")}
                 </div>
               </div>
               
