@@ -43,6 +43,7 @@ interface TimelineState {
   setDurationOptions: (options: number[]) => void;
   setSelectedDate: (date: Date) => void;
   setProfile: (profile: Profile) => void;
+  populateRandomData: () => void;
 }
 
 export const useTimelineStore = create<TimelineState>()(
