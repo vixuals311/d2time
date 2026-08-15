@@ -71,11 +71,11 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
   const Icon = typeIcons[event.type] || Clock;
 
   const typeStyles = {
-    meeting: 'bg-[#F0F7FF] text-[#4A90E2] border-[#D1E9FF]',
-    visit: 'bg-[#F2FAF5] text-[#48BB78] border-[#C6F6D5]',
-    guest: 'bg-[#FAF5FF] text-[#9F7AEA] border-[#E9D8FD]',
-    break: 'bg-[#FFF5F5] text-[#F56565] border-[#FED7D7]',
-    unavailable: 'bg-[#F7FAFC] text-[#718096] border-[#E2E8F0]',
+    meeting: 'bg-[#EBF8FF] text-[#2B6CB0] border-[#BEE3F8]',
+    visit: 'bg-[#F0FFF4] text-[#2F855A] border-[#C6F6D5]',
+    guest: 'bg-[#FAF5FF] text-[#6B46C1] border-[#E9D8FD]',
+    break: 'bg-[#FFF5F5] text-[#C53030] border-[#FED7D7]',
+    unavailable: 'bg-[#EDF2F7] text-[#4A5568] border-[#E2E8F0]',
   };
 
   return (
@@ -106,48 +106,25 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
         <div className="relative flex-1">
           {/* Connector Dot */}
           <div className={cn(
-            "absolute -left-[32px] md:-left-[46px] top-5 h-4 w-4 rounded-full border-2 bg-white z-10 transition-transform group-hover:scale-110",
-            isEventPast ? "border-[#CBD5E0]" : "border-[#3B82F6] shadow-[0_0_0_4px_rgba(59,130,246,0.1)]"
+            "absolute -left-[31px] md:-left-[45px] top-3 h-2.5 w-2.5 md:h-3 md:w-3 rounded-full border-2 bg-white z-10 transition-transform group-hover:scale-125",
+            isEventPast ? "border-[#CBD5E0]" : "border-[#2D3748] shadow-[0_0_0_4px_rgba(45,55,72,0.1)]"
           )} />
 
           <div
             className={cn(
-              "relative flex items-center gap-2 md:gap-5 rounded-[1.5rem] bg-white p-4 md:p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] border border-[#E2E8F0] hover:shadow-[0_20px_40px_-8px_rgba(0,0,0,0.08)] transition-all duration-500",
+              "relative flex items-center gap-2 md:gap-5 rounded-xl md:rounded-[2rem] bg-white p-3 md:p-6 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.03)] border border-transparent hover:border-[#E2E8F0] hover:shadow-[0_20px_40px_-8px_rgba(0,0,0,0.06)] transition-all duration-500",
             )}
           >
-            <div className="absolute right-4 top-4 flex flex-col gap-2 print:hidden">
-              <button
-                onClick={() => {
-                  const fmt = (d: Date) => format(d, "yyyyMMdd'T'HHmmss'Z'");
-                  const gCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${fmt(startTime)}/${fmt(endTime)}${event.location ? `&location=${encodeURIComponent(event.location)}` : ''}`;
-                  window.open(gCalUrl, '_blank');
-                }}
-                className="p-1.5 text-[#A0AEC0] hover:text-[#4A5568] transition-colors"
-                title="Add to Calendar"
-              >
-                <Calendar className="h-4 w-4" />
-              </button>
-              <button
-                onClick={() => setIsEditOpen(true)}
-                className="p-1.5 text-[#A0AEC0] hover:text-[#4A5568] transition-colors"
-                title="Edit"
-              >
-                <Edit3 className="h-4 w-4" />
-              </button>
-              <button
-                onClick={() => {
-                  removeEvent(event.id);
-                  toast.info("Event removed");
-                }}
-                className="p-1.5 text-[#A0AEC0] hover:text-[#F56565] transition-colors"
-                title="Delete"
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
-            </div>
+            <button
+              {...attributes}
+              {...listeners}
+              className="p-1 md:p-2 -ml-2 text-[#CBD5E0] hover:text-[#A0AEC0] hover:bg-[#F7FAFC] rounded-lg transition-all print:hidden touch-none"
+            >
+              <GripVertical className="h-5 w-5" />
+            </button>
 
             <div className="flex-1">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 md:mb-3 gap-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-1.5 md:mb-2 gap-2">
                 <div className="flex items-center gap-2">
                   <span className={cn(
                     "rounded-full px-3 py-1 text-[9px] font-bold uppercase tracking-[0.15em] border flex items-center gap-1.5 shadow-sm",
@@ -163,19 +140,19 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
                 </div>
               </div>
               
-              <h3 className="font-bold text-[#1A202C] text-sm md:text-xl leading-tight truncate md:whitespace-normal">{event.title}</h3>
+              <h3 className="font-semibold text-[#1A202C] text-sm md:text-lg leading-snug truncate md:whitespace-normal">{event.title}</h3>
               
               {(event.location || event.attendees) && (
-                <div className="flex flex-wrap gap-4 mt-4">
+                <div className="flex flex-wrap gap-4 mt-3">
                   {event.location && (
-                    <div className="flex items-center gap-1.5 text-xs font-medium text-[#718096]">
-                      <MapPin className="h-3.5 w-3.5" />
+                    <div className="flex items-center gap-1.5 text-xs text-[#718096]">
+                      <MapPin className="h-3 w-3" />
                       {event.location}
                     </div>
                   )}
                   {event.attendees && event.attendees.length > 0 && (
-                    <div className="flex items-center gap-1.5 text-xs font-medium text-[#718096]">
-                      <Users className="h-3.5 w-3.5" />
+                    <div className="flex items-center gap-1.5 text-xs text-[#718096]">
+                      <Users className="h-3 w-3" />
                       {event.attendees.length} people
                     </div>
                   )}
@@ -183,22 +160,79 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
               )}
             </div>
 
-            {/* Drag Handle at the left side */}
-            <div 
-              {...attributes} 
-              {...listeners}
-              className="absolute -left-2 top-0 bottom-0 w-4 cursor-grab active:cursor-grabbing print:hidden"
-            />
+            <div className="flex flex-col md:flex-row items-center gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-all print:hidden">
+              <button
+                onClick={() => {
+                  const fmt = (d: Date) => format(d, "yyyyMMdd'T'HHmmss'Z'");
+                  const gCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${fmt(startTime)}/${fmt(endTime)}${event.location ? `&location=${encodeURIComponent(event.location)}` : ''}`;
+                  window.open(gCalUrl, '_blank');
+                }}
+                className="p-1.5 md:p-2 text-[#718096] hover:bg-[#F7FAFC] rounded-lg transition-all"
+                title="Add to Google Calendar"
+              >
+                <Calendar className="h-3.5 w-3.5 md:h-4 md:w-4" />
+              </button>
 
+              <button
+                onClick={() => setIsEditOpen(true)}
+                className="p-2 text-[#718096] hover:bg-[#F7FAFC] rounded-lg transition-all"
+                title="Edit Event"
+              >
+                <Edit3 className="h-4 w-4" />
+              </button>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="p-1.5 md:p-2 text-[#718096] hover:bg-[#F7FAFC] rounded-lg transition-all">
+                    <Share2 className="h-3.5 w-3.5 md:h-4 md:w-4" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => {
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('event', event.id);
+                    navigator.clipboard.writeText(url.toString());
+                    toast.success("Event link copied");
+                  }}>
+                    <Share2 className="mr-2 h-4 w-4" /> Share Link
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => {
+                    const profileInfo = profile.name 
+                      ? `${profile.name}${profile.position ? ` (${profile.position}${profile.company ? ` at ${profile.company}` : ''})` : ''}`
+                      : 'High-Profile Individual';
+                    
+                    // Compact GCal URL
+                    const gCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${format(startTime, "yyyyMMdd'T'HHmmss'Z'")}/${format(endTime, "yyyyMMdd'T'HHmmss'Z'")}${event.location ? `&location=${encodeURIComponent(event.location)}` : ''}`;
+
+                    const message = `Dear Guest,\n\nYou have a ${event.type} today with ${profileInfo}.\n\nTime: ${format(startTime, "h:mm a")} - ${format(endTime, "h:mm a")}\nLocation: ${event.location || 'Not specified'}\n\nAdd to calendar: ${gCalUrl}`;
+                    
+                    navigator.clipboard.writeText(message);
+                    toast.success("Comprehensive event message copied");
+                  }}>
+                    <Copy className="mr-2 h-4 w-4" /> Copy Info
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <button
+                onClick={() => {
+                  removeEvent(event.id);
+                  toast.info("Event removed");
+                }}
+                className="p-1.5 md:p-2 text-[#FC8181] hover:bg-[#FFF5F5] rounded-lg transition-all"
+              >
+                <Trash2 className="h-3.5 w-3.5 md:h-4 md:w-4" />
+              </button>
+            </div>
           </div>
 
           {/* Buffer Indicator */}
-          <div className="absolute -bottom-8 md:-bottom-12 left-8 md:left-12 right-0 flex items-center gap-4 print:hidden">
-            <div className="h-[1px] flex-1 border-t border-dashed border-[#E2E8F0]" />
-            <span className="text-[10px] font-bold text-[#A0AEC0] uppercase tracking-[0.2em] whitespace-nowrap">
+          <div className="absolute -bottom-6 md:-bottom-8 left-6 md:left-8 right-0 flex items-center gap-2 md:gap-3 print:hidden">
+            <div className="h-[1px] flex-1 bg-dashed border-t border-dashed border-[#E2E8F0]" />
+            <span className="text-[8px] md:text-[9px] font-bold text-[#CBD5E0] uppercase tracking-[0.1em] md:tracking-[0.2em] whitespace-nowrap">
               {bufferMinutes}m buffer
             </span>
-            <div className="h-[1px] flex-1 border-t border-dashed border-[#E2E8F0]" />
+            <div className="h-[1px] flex-1 bg-dashed border-t border-dashed border-[#E2E8F0]" />
           </div>
         </div>
       </div>
@@ -300,12 +334,12 @@ export function Timeline() {
 
   if (events.length === 0) {
     return (
-      <div className="flex h-80 flex-col items-center justify-center rounded-[2rem] border-2 border-dashed border-[#EDF2F7] bg-white shadow-sm">
-        <div className="rounded-2xl bg-[#F7FAFC] p-6 mb-4 shadow-sm">
-          <Clock className="h-8 w-8 text-[#A0AEC0]" />
+      <div className="flex h-80 flex-col items-center justify-center rounded-[3rem] border-2 border-dashed border-[#EDF2F7] bg-white/40 backdrop-blur-md shadow-inner">
+        <div className="rounded-[2rem] bg-white p-8 mb-6 shadow-xl shadow-gray-100/50 animate-float">
+          <Clock className="h-10 w-10 text-[#2D3748]" />
         </div>
-        <p className="text-[#1A202C] text-xl font-bold tracking-tight">Timeline is clear</p>
-        <p className="text-sm text-[#718096] mt-1">No events scheduled for this day</p>
+        <p className="text-[#1A202C] text-lg font-medium tracking-tight">Timeline is clear</p>
+        <p className="text-sm text-[#A0AEC0] mt-2 font-light">No events scheduled for this day</p>
       </div>
     );
   }
@@ -321,7 +355,7 @@ export function Timeline() {
       <SortableContext items={events.map((e) => e.id)} strategy={verticalListSortingStrategy}>
         <div className="relative pl-0 md:pl-4 pb-12 print:hidden">
           {/* Vertical line - premium gradient */}
-          <div className="absolute left-[85px] md:left-[100px] top-4 bottom-4 w-[2px] bg-[#EDF2F7] -z-10" />
+          <div className="absolute left-[85px] md:left-[100px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-[#EDF2F7] via-[#CBD5E0] to-[#EDF2F7] -z-10 opacity-50" />
           
           {events.map((event, index) => {
             const startTime = new Date(event.startTime);
@@ -332,9 +366,9 @@ export function Timeline() {
               <div key={event.id} className="relative">
                 {isNow && (
                   <div className="absolute left-0 right-0 -top-8 flex items-center gap-4 z-20 print:hidden">
-                     <div className="w-16 md:w-20 text-right text-[9px] font-bold text-[#3B82F6] uppercase tracking-[0.2em] animate-pulse">Now</div>
-                     <div className="h-4 w-4 rounded-full bg-[#3B82F6] shadow-[0_0_10px_rgba(59,130,246,0.5)] border-4 border-white z-20 animate-pulse" />
-                     <div className="h-[2px] flex-1 bg-[#3B82F6] opacity-10" />
+                     <div className="w-16 md:w-20 text-right text-[9px] font-bold text-[#E53E3E] uppercase tracking-[0.2em] animate-pulse">Now</div>
+                     <div className="h-2 w-2 rounded-full bg-[#E53E3E] shadow-[0_0_10px_rgba(229,62,62,0.5)] animate-pulse" />
+                     <div className="h-[1px] flex-1 bg-gradient-to-r from-[#E53E3E] to-transparent opacity-20" />
                   </div>
                 )}
                 <SortableEventItem event={event} bufferMinutes={bufferMinutes} index={index} />
