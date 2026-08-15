@@ -16,8 +16,10 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { format, addMinutes, parseISO, parse, startOfDay } from 'date-fns';
-import { GripVertical, Clock, MapPin, Users, Trash2, Share2, Copy, Calendar } from 'lucide-react';
+import { GripVertical, Clock, MapPin, Users, Trash2, Share2, Copy, Calendar, Edit3 } from 'lucide-react';
 import { useTimelineStore, TimelineEvent } from '../lib/store';
+import { EditEventModal } from './EditEventModal';
+
 import { cn } from '../lib/utils';
 import { toast } from 'sonner';
 import {
@@ -42,6 +44,8 @@ function SortableEventItem({ event, bufferMinutes }: SortableEventItemProps) {
     isDragging,
   } = useSortable({ id: event.id });
   const removeEvent = useTimelineStore((state) => state.removeEvent);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -125,7 +129,16 @@ function SortableEventItem({ event, bufferMinutes }: SortableEventItemProps) {
             <Calendar className="h-4 w-4" />
           </button>
 
+          <button
+            onClick={() => setIsEditOpen(true)}
+            className="p-2 text-[#718096] hover:bg-[#F7FAFC] rounded-lg transition-all"
+            title="Edit Event"
+          >
+            <Edit3 className="h-4 w-4" />
+          </button>
+
           <DropdownMenu>
+
             <DropdownMenuTrigger asChild>
               <button className="p-2 text-[#718096] hover:bg-[#F7FAFC] rounded-lg transition-all">
                 <Share2 className="h-4 w-4" />
@@ -161,6 +174,13 @@ function SortableEventItem({ event, bufferMinutes }: SortableEventItemProps) {
           </button>
         </div>
       </div>
+
+      <EditEventModal 
+        event={event} 
+        open={isEditOpen} 
+        onOpenChange={setIsEditOpen} 
+      />
+
 
       {/* Buffer Indicator */}
       <div className="absolute -bottom-7 left-14 right-8 flex items-center gap-3">

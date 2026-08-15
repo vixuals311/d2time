@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { Share2, Link as LinkIcon, FileText, Image as ImageIcon, Check } from "lucide-react";
+import { Share2, Link as LinkIcon, FileText, Check } from "lucide-react";
+import { useTimelineStore } from "../lib/store";
+
 import {
   Dialog,
   DialogContent,
@@ -13,25 +15,33 @@ import html2canvas from "html2canvas";
 
 export function SharePanel() {
   const [copied, setCopied] = useState(false);
+  const selectedDate = useTimelineStore((state) => state.selectedDate);
 
   const copyLink = () => {
-    navigator.clipboard.writeText(window.location.href);
+    const url = new URL(window.location.origin);
+    url.pathname = `/share/${selectedDate}`;
+    navigator.clipboard.writeText(url.toString());
     setCopied(true);
-    toast.success("Link copied to clipboard");
+    toast.success("Shareable link copied");
     setTimeout(() => setCopied(false), 2000);
   };
+
 
   const exportPDF = async () => {
     const element = document.querySelector('main');
     if (!element) return;
     
-    toast.loading("Generating PDF...");
+    toast.loading("Generating PDF...", { id: "pdf-gen" });
+    
+    // Optimization: Don't use scale: 2 unless high res is critical
     const canvas = await html2canvas(element, {
-      scale: 2,
+      scale: 1.5,
       logging: false,
       useCORS: true,
-      backgroundColor: '#F8F9FB'
+      backgroundColor: '#F8F9FB',
+      removeContainer: true
     });
+
     
     const imgData = canvas.toDataURL('image/png');
     const pdf = new jsPDF('p', 'mm', 'a4');
@@ -41,8 +51,9 @@ export function SharePanel() {
     
     pdf.addImage(imgData, 'PNG', 0, 10, pdfWidth, pdfHeight);
     pdf.save(`Timeline-${new Date().toISOString().split('T')[0]}.pdf`);
-    toast.dismiss();
-    toast.success("PDF exported successfully");
+    toast.dismiss("pdf-gen");
+    toast.success("PDF ready");
+
   };
 
   return (
