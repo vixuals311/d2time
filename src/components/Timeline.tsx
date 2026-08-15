@@ -78,12 +78,11 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
   return (
     <div 
       ref={setNodeRef} 
-      style={style} 
+      style={{ ...style, animationDelay: `${index * 0.1}s` }} 
       className={cn(
         "relative mb-12 group animate-event",
         isEventPast && "opacity-75 grayscale-[0.2]"
       )}
-      style={{ animationDelay: `${index * 0.1}s` }}
     >
       <div className="flex gap-6 md:gap-8">
         {/* Time Column */}
