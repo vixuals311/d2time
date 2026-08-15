@@ -104,7 +104,14 @@ export function AddEventModal() {
     
     const isFuture = isAfter(time, startOfMinute(now)) || time.getTime() === startOfMinute(now).getTime();
 
-    return isWithinWorkingHours && isFuture;
+    // Check if selecting this time would immediately clash with an existing event's buffer
+    const hasClash = events.some((e) => {
+      const eStart = parseISO(e.startTime);
+      const eEndWithBuffer = addMinutes(eStart, e.durationMinutes + bufferMinutes);
+      return (isAfter(time, eStart) || time.getTime() === eStart.getTime()) && isBefore(time, eEndWithBuffer);
+    });
+
+    return isWithinWorkingHours && isFuture && !hasClash;
   };
 
   const getAvailableDuration = (duration: number) => {

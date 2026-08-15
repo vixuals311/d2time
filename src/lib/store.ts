@@ -92,7 +92,17 @@ export const useTimelineStore = create<TimelineState>()(
           const existing = state.events.find((e) => e.id === id);
           if (!existing) return state;
           const updated = { ...existing, ...updates };
-          const hasClash = checkClash(updated, state.events.filter((e) => e.id !== id));
+          
+          const hasClash = state.events.filter((e) => e.id !== id).some((e) => {
+            const eStart = parseISO(e.startTime);
+            const eEnd = addMinutes(eStart, e.durationMinutes + state.bufferMinutes);
+            
+            const updatedStart = parseISO(updated.startTime);
+            const updatedEnd = addMinutes(updatedStart, updated.durationMinutes + state.bufferMinutes);
+            
+            return isBefore(updatedStart, eEnd) && isAfter(updatedEnd, eStart);
+          });
+
           if (hasClash) {
             success = false;
             return state;
