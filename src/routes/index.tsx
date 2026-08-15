@@ -5,6 +5,8 @@ import { format } from "date-fns";
 import { Timeline } from "../components/Timeline";
 import { AddEventModal } from "../components/AddEventModal";
 import { SharePanel } from "../components/SharePanel";
+import { Settings } from "../components/Settings";
+import { useReminders } from "../lib/useReminders";
 import { Toaster } from "sonner";
 
 export const Route = createFileRoute("/")({
@@ -13,6 +15,7 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const events = useTimelineStore((state) => state.events);
+  useReminders();
 
   return (
     <div className="min-h-screen bg-[#F8F9FB] px-6 py-8 md:p-12 font-sans selection:bg-[#EBF8FF]">
@@ -33,6 +36,7 @@ function Index() {
         <div className="flex items-center gap-3">
           <SharePanel />
           <AddEventModal />
+          <Settings />
         </div>
       </header>
 

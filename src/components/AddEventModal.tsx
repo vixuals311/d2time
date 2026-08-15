@@ -122,6 +122,7 @@ export function AddEventModal() {
                 <Input
                   id="location"
                   placeholder="Main Hall"
+                  value={formData.location}
                   onChange={(e) =>
                     setFormData((prev) => ({ ...prev, location: e.target.value }))
                   }
