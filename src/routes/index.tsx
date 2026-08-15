@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Plus, Share2, Calendar as CalendarIcon, Settings as SettingsIcon } from "lucide-react";
+import { Plus, Share2, Calendar as CalendarIcon, Settings as SettingsIcon, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTimelineStore } from "../lib/store";
-import { format } from "date-fns";
+import { format, addDays, parseISO } from "date-fns";
 import { Timeline } from "../components/Timeline";
 import { AddEventModal } from "../components/AddEventModal";
 import { SharePanel } from "../components/SharePanel";
@@ -14,8 +14,13 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const events = useTimelineStore((state) => state.events);
+  const { selectedDate, setSelectedDate } = useTimelineStore();
+  const currentSelectedDate = parseISO(selectedDate);
   useReminders();
+
+  const handlePrevDay = () => setSelectedDate(addDays(currentSelectedDate, -1));
+  const handleNextDay = () => setSelectedDate(addDays(currentSelectedDate, 1));
+  const handleToday = () => setSelectedDate(new Date());
 
   return (
     <div className="min-h-screen bg-[#F8F9FB] px-6 py-8 md:p-12 font-sans selection:bg-[#EBF8FF]">
@@ -29,8 +34,32 @@ function Index() {
             </div>
             <span className="text-xs font-bold uppercase tracking-widest text-[#A0AEC0]">PA Assistant</span>
           </div>
-          <h1 className="text-4xl font-serif font-medium text-[#1A202C] tracking-tight">Daily Timeline</h1>
-          <p className="text-[#718096] mt-1 text-lg">{format(new Date(), "EEEE, MMMM do")}</p>
+          <h1 className="text-4xl font-serif font-medium text-[#1A202C] tracking-tight">Timeline</h1>
+          <div className="flex items-center gap-3 mt-1">
+            <p className="text-[#718096] text-lg">{format(currentSelectedDate, "EEEE, MMMM do")}</p>
+            <div className="flex items-center bg-white border border-[#EDF2F7] rounded-lg shadow-sm px-1 py-0.5">
+              <button 
+                onClick={handlePrevDay}
+                className="p-1 hover:bg-[#F7FAFC] rounded transition-colors text-[#718096]"
+                title="Previous Day"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+              <button 
+                onClick={handleToday}
+                className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[#4A5568] hover:bg-[#F7FAFC] rounded transition-colors"
+              >
+                Today
+              </button>
+              <button 
+                onClick={handleNextDay}
+                className="p-1 hover:bg-[#F7FAFC] rounded transition-colors text-[#718096]"
+                title="Next Day"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
         </div>
         
         <div className="flex items-center gap-3">

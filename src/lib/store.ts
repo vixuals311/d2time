@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { addMinutes, isBefore, isAfter, parseISO } from 'date-fns';
+import { addMinutes, isBefore, isAfter, parseISO, startOfDay } from 'date-fns';
 
 export type EventType = 'visit' | 'meeting' | 'guest' | 'break' | 'unavailable';
 
@@ -23,6 +23,7 @@ export interface WorkingHours {
 
 interface TimelineState {
   events: TimelineEvent[];
+  selectedDate: string; // ISO date string (start of day)
   bufferMinutes: number;
   workingHours: WorkingHours;
   durationOptions: number[];
@@ -33,6 +34,7 @@ interface TimelineState {
   setEvents: (events: TimelineEvent[]) => void;
   setWorkingHours: (hours: WorkingHours) => void;
   setDurationOptions: (options: number[]) => void;
+  setSelectedDate: (date: Date) => void;
 }
 
 
@@ -40,6 +42,7 @@ export const useTimelineStore = create<TimelineState>()(
   persist(
     (set) => ({
       events: [],
+      selectedDate: startOfDay(new Date()).toISOString(),
       bufferMinutes: 15,
       workingHours: { start: '09:00', end: '18:00' },
       durationOptions: [15, 30, 60, 120],
@@ -109,6 +112,7 @@ export const useTimelineStore = create<TimelineState>()(
       setEvents: (events) => set({ events }),
       setWorkingHours: (hours) => set({ workingHours: hours }),
       setDurationOptions: (options) => set({ durationOptions: options }),
+      setSelectedDate: (date) => set({ selectedDate: startOfDay(date).toISOString() }),
 
     }),
     {

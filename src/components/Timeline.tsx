@@ -15,7 +15,7 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { format, addMinutes, parseISO, parse } from 'date-fns';
+import { format, addMinutes, parseISO, parse, startOfDay } from 'date-fns';
 import { GripVertical, Clock, MapPin, Users, Trash2, Share2, Copy, Calendar } from 'lucide-react';
 import { useTimelineStore, TimelineEvent } from '../lib/store';
 import { cn } from '../lib/utils';
@@ -175,7 +175,13 @@ function SortableEventItem({ event, bufferMinutes }: SortableEventItemProps) {
 }
 
 export function Timeline() {
-  const { events, bufferMinutes, setEvents, workingHours } = useTimelineStore();
+  const { events: allEvents, bufferMinutes, setEvents, workingHours, selectedDate } = useTimelineStore();
+  
+  const events = allEvents.filter(e => {
+    const eventDate = startOfDay(parseISO(e.startTime)).toISOString();
+    return eventDate === selectedDate;
+  });
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
