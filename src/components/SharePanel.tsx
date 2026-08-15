@@ -25,7 +25,9 @@ export function SharePanel() {
   };
 
   const exportPDF = () => {
-    toast.loading("Preparing print view...", { id: "pdf-gen" });
+    const toastId = toast.loading("Preparing print view...", {
+      description: "Generating professional tabular layout",
+    });
     
     // Close the dialog first so it's not in the print view
     setOpen(false);
@@ -37,9 +39,9 @@ export function SharePanel() {
       window.print();
       document.body.classList.remove('print-tabular');
       
-      toast.dismiss("pdf-gen");
-      toast.success("Print dialog opened");
-    }, 300);
+      toast.dismiss(toastId);
+      toast.success("Schedule exported successfully");
+    }, 500);
   };
 
   return (
