@@ -31,13 +31,13 @@ function Index() {
     <div className="min-h-screen bg-[#F7FAFC] px-4 py-6 md:px-12 md:py-16 font-sans selection:bg-accent text-[#1A202C]">
       <Toaster position="top-center" richColors />
       
-      <header className="mx-auto max-w-4xl mb-8 flex items-center justify-between print:hidden">
+      <header className="mx-auto max-w-4xl mb-12 flex items-center justify-between print:hidden">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-[#2D3748] flex items-center justify-center text-white shadow-lg shadow-gray-200/50">
+          <div className="h-10 w-10 rounded-xl bg-[#2D3748] flex items-center justify-center text-white shadow-lg shadow-gray-200/40">
             <CalendarIcon className="h-5 w-5" />
           </div>
-          <div>
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#A0AEC0] block leading-none mb-0.5">Executive Suite</span>
+          <div className="hidden sm:block">
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#A0AEC0] block leading-none mb-1">Executive Suite</span>
             <span className="text-xs font-semibold text-[#4A5568]">Personal Assistant v2.0</span>
           </div>
         </div>
@@ -56,8 +56,8 @@ function Index() {
       </header>
 
       <div className="mx-auto max-w-4xl mb-12">
-        <h1 className="text-[52px] font-serif font-bold text-[#1A202C] tracking-tight leading-tight">Timeline</h1>
-        <p className="text-[#718096] text-2xl font-light mt-1">{format(currentSelectedDate, "EEEE, MMMM do")}</p>
+        <h1 className="text-[56px] font-serif font-bold text-[#1A202C] tracking-tight leading-[1.1]">Timeline</h1>
+        <p className="text-[#A0AEC0] text-2xl font-light mt-2">{format(currentSelectedDate, "EEEE, MMMM do")}</p>
         
         <div className="mt-8 flex flex-col sm:flex-row items-center gap-4">
           <div className="flex items-center w-full justify-between sm:w-auto bg-white border border-[#E2E8F0] rounded-2xl shadow-sm px-2 py-2 print:hidden flex-1 sm:flex-none">
@@ -68,13 +68,13 @@ function Index() {
               <ChevronLeft className="h-5 w-5" />
             </button>
             
-            <div className="flex items-center gap-4 px-4 border-l border-r border-[#EDF2F7]">
+            <div className="flex items-center gap-6 px-6 border-l border-r border-[#EDF2F7]">
               <Popover>
                 <PopoverTrigger asChild>
                   <button 
-                    className="flex items-center gap-2 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-[#2D3748] hover:bg-[#F7FAFC] rounded-xl transition-colors"
+                    className="flex items-center gap-2 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-[#2D3748] hover:bg-[#F7FAFC] rounded-xl transition-all"
                   >
-                    <CalendarDays className="h-4 w-4" />
+                    <CalendarDays className="h-4 w-4 text-[#A0AEC0]" />
                     Pick Date
                   </button>
                 </PopoverTrigger>
