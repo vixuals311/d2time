@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Share2, Link as LinkIcon, FileText, Image as ImageIcon, Check } from "lucide-react";
+import { Share2, Link as LinkIcon, FileText, Check } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -8,41 +8,27 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { toast } from "sonner";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+import { useTimelineStore } from "../lib/store";
 
 export function SharePanel() {
   const [copied, setCopied] = useState(false);
+  const selectedDate = useTimelineStore((state) => state.selectedDate);
 
   const copyLink = () => {
-    navigator.clipboard.writeText(window.location.href);
+    const url = new URL(window.location.origin);
+    url.pathname = `/share/${selectedDate}`;
+    navigator.clipboard.writeText(url.toString());
     setCopied(true);
-    toast.success("Link copied to clipboard");
+    toast.success("Shareable link copied");
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const exportPDF = async () => {
-    const element = document.querySelector('main');
-    if (!element) return;
-    
-    toast.loading("Generating PDF...");
-    const canvas = await html2canvas(element, {
-      scale: 2,
-      logging: false,
-      useCORS: true,
-      backgroundColor: '#F8F9FB'
-    });
-    
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-    
-    pdf.addImage(imgData, 'PNG', 0, 10, pdfWidth, pdfHeight);
-    pdf.save(`Timeline-${new Date().toISOString().split('T')[0]}.pdf`);
-    toast.dismiss();
-    toast.success("PDF exported successfully");
+  const exportPDF = () => {
+    toast.loading("Preparing print view...", { id: "pdf-gen" });
+    // Use window.print() for faster, higher quality PDF generation
+    window.print();
+    toast.dismiss("pdf-gen");
+    toast.success("Print dialog opened");
   };
 
   return (
@@ -82,8 +68,8 @@ export function SharePanel() {
                 <FileText className="h-5 w-5" />
               </div>
               <div className="text-left">
-                <p className="text-sm font-semibold text-[#2D3748]">Download PDF</p>
-                <p className="text-xs text-[#718096]">Save as a clean document</p>
+                <p className="text-sm font-semibold text-[#2D3748]">Download PDF / Print</p>
+                <p className="text-xs text-[#718096]">Save as a high-quality document</p>
               </div>
             </div>
           </button>
