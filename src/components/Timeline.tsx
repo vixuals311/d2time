@@ -205,11 +205,11 @@ export function Timeline() {
       const dayEnd = parse(`${baseDate} ${workingHours.end}`, "yyyy-MM-dd HH:mm", new Date());
 
       const firstStart = new Date(updatedEvents[0].startTime);
-      const lastEvent = updatedEvents[updatedEvents.length - 1];
-      const lastEnd = addMinutes(new Date(lastEvent.startTime), lastEvent.durationMinutes);
+      const lastEventItem = updatedEvents[updatedEvents.length - 1];
+      const lastEnd = addMinutes(new Date(lastEventItem.startTime), lastEventItem.durationMinutes);
 
       if (firstStart < dayStart || lastEnd > dayEnd) {
-        toast.error("Schedule exceeds working hours!");
+        toast.error(`Schedule exceeds working hours (${workingHours.start} - ${workingHours.end})!`);
         return;
       }
 
