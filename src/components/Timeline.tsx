@@ -204,7 +204,7 @@ export function Timeline() {
       const dayStart = parse(`${baseDate} ${workingHours.start}`, "yyyy-MM-dd HH:mm", new Date());
       const dayEnd = parse(`${baseDate} ${workingHours.end}`, "yyyy-MM-dd HH:mm", new Date());
 
-      const firstStart = new Date(updatedEvents[0].startTime);
+      const firstStart = new Date(updatedEvents[0]!.startTime);
       const lastEventItem = updatedEvents[updatedEvents.length - 1];
       
       if (lastEventItem) {
