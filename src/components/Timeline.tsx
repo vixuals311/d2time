@@ -113,6 +113,18 @@ function SortableEventItem({ event, bufferMinutes }: SortableEventItemProps) {
         </div>
 
         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
+          <button
+            onClick={() => {
+              const fmt = (d: Date) => format(d, "yyyyMMdd'T'HHmmss'Z'");
+              const gCalUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${fmt(startTime)}/${fmt(endTime)}&details=${encodeURIComponent(event.description || '')}&location=${encodeURIComponent(event.location || '')}`;
+              window.open(gCalUrl, '_blank');
+            }}
+            className="p-2 text-[#718096] hover:bg-[#F7FAFC] rounded-lg transition-all"
+            title="Add to Google Calendar"
+          >
+            <Calendar className="h-4 w-4" />
+          </button>
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="p-2 text-[#718096] hover:bg-[#F7FAFC] rounded-lg transition-all">
@@ -134,13 +146,6 @@ function SortableEventItem({ event, bufferMinutes }: SortableEventItemProps) {
                 toast.success("Event info copied");
               }}>
                 <Copy className="mr-2 h-4 w-4" /> Copy Info
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {
-                const fmt = (d: Date) => format(d, "yyyyMMdd'T'HHmmss'Z'");
-                const gCalUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${fmt(startTime)}/${fmt(endTime)}&details=${encodeURIComponent(event.description || '')}&location=${encodeURIComponent(event.location || '')}`;
-                window.open(gCalUrl, '_blank');
-              }}>
-                <Calendar className="mr-2 h-4 w-4" /> Add to GCal
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
