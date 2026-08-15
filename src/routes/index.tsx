@@ -45,54 +45,55 @@ function Index() {
           <h1 className="text-4xl md:text-5xl font-serif font-medium text-foreground tracking-tight text-gradient">Timeline</h1>
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-4 mt-3">
-            <p className="text-[#718096] text-lg md:text-xl font-light">{format(currentSelectedDate, "EEEE, MMMM do")}</p>
-            <div className="flex items-center bg-white border border-[#EDF2F7] rounded-lg shadow-sm px-1 py-0.5 print:hidden">
+            <p className="text-muted-foreground text-lg md:text-xl font-light">{format(currentSelectedDate, "EEEE, MMMM do")}</p>
+            <div className="flex items-center w-full justify-between sm:w-auto bg-card border border-border rounded-xl shadow-sm px-1 py-1 print:hidden">
               <button 
                 onClick={handlePrevDay}
-                className="p-1 hover:bg-[#F7FAFC] rounded transition-colors text-[#718096]"
+                className="p-1.5 hover:bg-accent rounded-lg transition-colors text-muted-foreground"
                 title="Previous Day"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
               
-              <Popover>
-                <PopoverTrigger asChild>
-                  <button 
-                    className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[#4A5568] hover:bg-[#F7FAFC] rounded transition-colors flex items-center gap-1.5"
-                  >
-                    <CalendarDays className="h-3 w-3" />
-                    Pick Date
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={currentSelectedDate}
-                    onSelect={(date) => date && setSelectedDate(date)}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
+              <div className="flex items-center gap-2 px-2">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <button 
+                      className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-foreground hover:bg-accent rounded-lg transition-colors flex items-center gap-1.5"
+                    >
+                      <CalendarDays className="h-3 w-3" />
+                      Pick Date
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="center">
+                    <Calendar
+                      mode="single"
+                      selected={currentSelectedDate}
+                      onSelect={(date) => date && setSelectedDate(date)}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
 
-              <button 
-                onClick={handleToday}
-                className={cn(
-                  "px-2 py-1 text-[10px] font-bold uppercase tracking-wider hover:bg-[#F7FAFC] rounded transition-colors",
-                  format(new Date(), "yyyy-MM-dd") === selectedDate ? "text-[#2D3748] bg-[#F7FAFC]" : "text-[#718096]"
-                )}
-              >
-                Today
-              </button>
+                <button 
+                  onClick={handleToday}
+                  className={cn(
+                    "px-2 py-1 text-[10px] font-bold uppercase tracking-wider hover:bg-accent rounded-lg transition-colors",
+                    format(new Date(), "yyyy-MM-dd") === selectedDate ? "text-primary bg-accent" : "text-muted-foreground"
+                  )}
+                >
+                  Today
+                </button>
+              </div>
 
               <button 
                 onClick={handleNextDay}
-                className="p-1 hover:bg-[#F7FAFC] rounded transition-colors text-[#718096]"
+                className="p-1.5 hover:bg-accent rounded-lg transition-colors text-muted-foreground"
                 title="Next Day"
               >
                 <ChevronRight className="h-4 w-4" />
               </button>
             </div>
-
           </div>
         </div>
         
