@@ -116,7 +116,7 @@ function Index() {
             </div>
             <Link 
               to="/settings"
-              className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-[#4A5568] shadow-sm border border-[#E2E8F0] hover:bg-[#F7FAFC] transition-all"
+              className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-[#A0AEC0] shadow-sm border border-[#E2E8F0] hover:text-[#4A5568] hover:bg-[#F7FAFC] transition-all"
             >
               <SettingsIcon className="h-5 w-5" />
             </Link>
