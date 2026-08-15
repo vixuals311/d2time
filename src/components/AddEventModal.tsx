@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
-import { parse, format, isBefore, isAfter } from "date-fns";
+import { parse, format, isBefore, isAfter, startOfMinute } from "date-fns";
 import {
   Dialog,
   DialogContent,
@@ -21,12 +21,14 @@ import {
 import { useTimelineStore, EventType } from "../lib/store";
 import { toast } from "sonner";
 import DatePicker from "react-datepicker";
+import { cn } from "@/lib/utils";
 
 export function AddEventModal() {
   const [open, setOpen] = useState(false);
   const addEvent = useTimelineStore((state) => state.addEvent);
   const bufferMinutes = useTimelineStore((state) => state.bufferMinutes);
   const workingHours = useTimelineStore((state) => state.workingHours);
+  const durationOptions = useTimelineStore((state) => state.durationOptions);
 
   const [formData, setFormData] = useState<{
     title: string;
@@ -61,6 +63,12 @@ export function AddEventModal() {
       return;
     }
 
+    // Check if time has passed
+    if (isBefore(eventStart, startOfMinute(new Date()))) {
+      toast.error("Cannot schedule events in the past");
+      return;
+    }
+
     const success = addEvent({
       title: formData.title,
       startTime: eventStart.toISOString(),
@@ -88,10 +96,14 @@ export function AddEventModal() {
     const baseDate = format(formData.startDate, "yyyy-MM-dd");
     const dayStart = parse(`${baseDate} ${workingHours.start}`, "yyyy-MM-dd HH:mm", new Date());
     const dayEnd = parse(`${baseDate} ${workingHours.end}`, "yyyy-MM-dd HH:mm", new Date());
+    const now = new Date();
     
-    // Allow the start and end times to be selectable
-    return (isAfter(time, dayStart) || time.getTime() === dayStart.getTime()) && 
-           (isBefore(time, dayEnd) || time.getTime() === dayEnd.getTime());
+    const isWithinWorkingHours = (isAfter(time, dayStart) || time.getTime() === dayStart.getTime()) && 
+                                (isBefore(time, dayEnd) || time.getTime() === dayEnd.getTime());
+    
+    const isFuture = isAfter(time, startOfMinute(now)) || time.getTime() === startOfMinute(now).getTime();
+
+    return isWithinWorkingHours && isFuture;
   };
 
   return (
@@ -131,29 +143,50 @@ export function AddEventModal() {
                     timeCaption="time"
                     dateFormat="MMMM d, yyyy h:mm aa"
                     filterTime={filterPassedTime}
+                    minDate={new Date()}
                     className="flex h-10 w-full rounded-xl border border-input bg-background px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm transition-all"
                   />
                 </div>
                 <p className="text-[10px] text-muted-foreground">
-                  * Only hours between {workingHours.start} and {workingHours.end} are selectable.
+                  * Only future hours between {workingHours.start} and {workingHours.end} are selectable.
                 </p>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="duration">Duration (min)</Label>
-                <Input
-                  id="duration"
-                  type="number"
-                  min="5"
-                  step="5"
-                  value={formData.durationMinutes}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      durationMinutes: Number(e.target.value),
-                    }))
-                  }
-                  className="w-full"
-                />
+                <Label className="text-sm font-medium">Duration</Label>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {durationOptions.map((opt) => (
+                    <button
+                      key={opt}
+                      type="button"
+                      onClick={() => setFormData(prev => ({ ...prev, durationMinutes: opt }))}
+                      className={cn(
+                        "px-3 py-1 rounded-lg text-xs font-medium border transition-all",
+                        formData.durationMinutes === opt 
+                          ? "bg-[#2D3748] text-white border-[#2D3748]" 
+                          : "bg-white text-[#4A5568] border-[#EDF2F7] hover:bg-[#F7FAFC]"
+                      )}
+                    >
+                      {opt >= 60 ? `${opt/60}h` : `${opt}m`}
+                    </button>
+                  ))}
+                </div>
+                <div className="flex items-center gap-2">
+                  <Input
+                    id="duration"
+                    type="number"
+                    min="1"
+                    step="1"
+                    value={formData.durationMinutes}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        durationMinutes: Number(e.target.value),
+                      }))
+                    }
+                    className="h-9 w-24 rounded-xl"
+                  />
+                  <span className="text-xs text-muted-foreground">custom min</span>
+                </div>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
