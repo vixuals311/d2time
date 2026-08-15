@@ -378,7 +378,7 @@ export function Timeline() {
 
           {/* Quick Add at the bottom */}
           <div className="flex gap-4 md:gap-8 items-center mt-4 print:hidden">
-             <div className="w-16 md:w-20 invisible" />
+             <div className="w-20 md:w-24 invisible" />
              <div className="relative flex-1">
                 <div className="absolute -left-[29px] md:-left-[43px] top-1/2 -translate-y-1/2 h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-[#EDF2F7] border border-[#CBD5E0]" />
                 <AddEventModal 
