@@ -88,25 +88,25 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
         isEventPast && !isDragging && "opacity-60 grayscale-[0.5]"
       )}
     >
-      <div className="flex gap-4 md:gap-8">
+      <div className="flex gap-2 md:gap-4">
         {/* Time Column */}
-        <div className="w-24 md:w-28 pt-1 text-right flex-shrink-0 pr-6 md:pr-8">
+        <div className="w-12 md:w-16 pt-1.5 text-right flex-shrink-0">
           <div className={cn(
-            "text-[10px] md:text-xs font-bold tracking-tight",
+            "text-[9px] md:text-[11px] font-bold tracking-tighter",
             isEventPast ? "text-[#A0AEC0]" : "text-[#2D3748]"
           )}>
             {format(startTime, "h:mm")}
           </div>
-          <div className="text-[8px] md:text-[10px] text-[#A0AEC0] font-medium uppercase tracking-tighter">
+          <div className="text-[7px] md:text-[8px] text-[#A0AEC0] font-medium uppercase tracking-tighter -mt-0.5">
             {format(startTime, "a")}
           </div>
         </div>
 
         {/* Event Card */}
-        <div className="relative flex-1">
+        <div className="relative flex-1 min-w-0">
           {/* Connector Dot */}
           <div className={cn(
-            "absolute -left-[39px] md:-left-[53px] top-3 h-2.5 w-2.5 md:h-3 md:w-3 rounded-full border-2 bg-white z-10 transition-transform group-hover:scale-125",
+            "absolute -left-[17px] md:-left-[26px] top-3.5 h-2 w-2 md:h-2.5 md:w-2.5 rounded-full border-2 bg-white z-10 transition-transform group-hover:scale-125",
             isEventPast ? "border-[#CBD5E0]" : "border-[#2D3748] shadow-[0_0_0_4px_rgba(45,55,72,0.1)]"
           )} />
 
