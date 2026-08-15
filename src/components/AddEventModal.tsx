@@ -104,7 +104,7 @@ export function AddEventModal() {
                 }
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="startTime">Start Time</Label>
                 <Input
@@ -114,6 +114,7 @@ export function AddEventModal() {
                   onChange={(e) =>
                     setFormData((prev) => ({ ...prev, startTime: e.target.value }))
                   }
+                  className="w-full"
                 />
               </div>
               <div className="grid gap-2">
@@ -130,6 +131,7 @@ export function AddEventModal() {
                       durationMinutes: Number(e.target.value),
                     }))
                   }
+                  className="w-full"
                 />
               </div>
             </div>
