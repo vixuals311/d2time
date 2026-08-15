@@ -23,7 +23,7 @@ import { toast } from "sonner";
 import DatePicker from "react-datepicker";
 import { cn } from "@/lib/utils";
 
-export function AddEventModal() {
+export function AddEventModal({ trigger }: { trigger?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const { events: allEvents, addEvent, bufferMinutes, workingHours, durationOptions, selectedDate } = useTimelineStore();
   const events = allEvents.filter(e => startOfDay(parseISO(e.startTime)).toISOString() === selectedDate);
@@ -168,9 +168,13 @@ export function AddEventModal() {
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <button className="flex items-center gap-2 rounded-xl bg-[#2D3748] px-4 py-2 text-sm font-medium text-white shadow-md hover:bg-[#1A202C] transition-all">
-          <Plus className="h-4 w-4" /> Add Event
-        </button>
+        {trigger !== undefined ? (
+          trigger
+        ) : (
+          <button className="flex items-center gap-2 rounded-xl bg-[#2D3748] px-4 py-2 text-sm font-medium text-white shadow-md hover:bg-[#1A202C] transition-all">
+            <Plus className="h-4 w-4" /> Add Event
+          </button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
