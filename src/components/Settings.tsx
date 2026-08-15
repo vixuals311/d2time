@@ -14,8 +14,8 @@ export function Settings() {
           <SettingsIcon className="h-4 w-4" />
         </button>
       </PopoverTrigger>
-      <PopoverContent align="end">
-        <div className="space-y-4">
+      <PopoverContent align="end" className="w-64">
+        <div className="space-y-4 p-1">
           <h4 className="font-semibold text-sm text-[#2D3748]">Schedule Settings</h4>
           <div className="grid gap-2">
             <Label htmlFor="buffer" className="text-xs">Default Buffer (minutes)</Label>
