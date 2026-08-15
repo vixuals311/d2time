@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
-
   DndContext,
   closestCenter,
   KeyboardSensor,
@@ -17,11 +16,11 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { format, addMinutes, parseISO, parse, startOfDay } from 'date-fns';
-import { GripVertical, Clock, MapPin, Users, Trash2, Share2, Copy, Calendar, Edit3 } from 'lucide-react';
+import { format, addMinutes, parseISO, parse, startOfDay, isPast, isFuture, isSameMinute } from 'date-fns';
+import { GripVertical, Clock, MapPin, Users, Trash2, Share2, Copy, Calendar, Edit3, Briefcase, Coffee, User, Map, AlertCircle, Plus } from 'lucide-react';
 import { useTimelineStore, TimelineEvent } from '../lib/store';
 import { EditEventModal } from './EditEventModal';
-
+import { AddEventModal } from './AddEventModal';
 import { cn } from '../lib/utils';
 import { toast } from 'sonner';
 import {
