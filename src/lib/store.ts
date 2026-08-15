@@ -21,12 +21,19 @@ export interface WorkingHours {
   end: string; // "HH:mm"
 }
 
+export interface Profile {
+  name: string;
+  position: string;
+  company: string;
+}
+
 interface TimelineState {
   events: TimelineEvent[];
   selectedDate: string; // ISO date string (start of day)
   bufferMinutes: number;
   workingHours: WorkingHours;
   durationOptions: number[];
+  profile: Profile;
   addEvent: (event: Omit<TimelineEvent, 'id'>) => boolean;
   updateEvent: (id: string, updates: Partial<TimelineEvent>, forceShift?: boolean) => boolean;
   removeEvent: (id: string) => void;
@@ -35,9 +42,8 @@ interface TimelineState {
   setWorkingHours: (hours: WorkingHours) => void;
   setDurationOptions: (options: number[]) => void;
   setSelectedDate: (date: Date) => void;
-
+  setProfile: (profile: Profile) => void;
 }
-
 
 export const useTimelineStore = create<TimelineState>()(
   persist(
@@ -47,6 +53,7 @@ export const useTimelineStore = create<TimelineState>()(
       bufferMinutes: 15,
       workingHours: { start: '09:00', end: '18:00' },
       durationOptions: [15, 30, 60, 120],
+      profile: { name: '', position: '', company: '' },
 
       addEvent: (event) => {
         let success = true;
@@ -145,6 +152,7 @@ export const useTimelineStore = create<TimelineState>()(
       setWorkingHours: (hours) => set({ workingHours: hours }),
       setDurationOptions: (options) => set({ durationOptions: options }),
       setSelectedDate: (date) => set({ selectedDate: startOfDay(date).toISOString() }),
+      setProfile: (profile: Profile) => set({ profile }),
 
     }),
     {

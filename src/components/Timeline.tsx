@@ -48,7 +48,7 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
     transition,
     isDragging,
   } = useSortable({ id: event.id });
-  const removeEvent = useTimelineStore((state) => state.removeEvent);
+  const { removeEvent, profile } = useTimelineStore();
   const [isEditOpen, setIsEditOpen] = useState(false);
 
   const style = {
@@ -197,9 +197,16 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
                     <Share2 className="mr-2 h-4 w-4" /> Share Link
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => {
-                    const text = `${event.title}\n${format(startTime, "h:mm a")} - ${format(endTime, "h:mm a")}\n${event.location || ''}`;
-                    navigator.clipboard.writeText(text);
-                    toast.success("Event info copied");
+                    const profileInfo = profile.name 
+                      ? `${profile.name}${profile.position ? ` (${profile.position}${profile.company ? ` at ${profile.company}` : ''})` : ''}`
+                      : 'High-Profile Individual';
+                    
+                    const gCalUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${format(startTime, "yyyyMMdd'T'HHmmss'Z'")}/${format(endTime, "yyyyMMdd'T'HHmmss'Z'")}&details=${encodeURIComponent(event.description || '')}&location=${encodeURIComponent(event.location || '')}`;
+
+                    const message = `Dear Guest,\n\nYou have a ${event.type} today with ${profileInfo}.\n\nTime: ${format(startTime, "h:mm a")} - ${format(endTime, "h:mm a")}\nLocation: ${event.location || 'Not specified'}\n\nAdd to calendar: ${gCalUrl}`;
+                    
+                    navigator.clipboard.writeText(message);
+                    toast.success("Comprehensive event message copied");
                   }}>
                     <Copy className="mr-2 h-4 w-4" /> Copy Info
                   </DropdownMenuItem>
