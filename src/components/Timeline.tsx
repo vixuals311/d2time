@@ -353,7 +353,7 @@ export function Timeline() {
       onDragCancel={() => setActiveId(null)}
     >
       <SortableContext items={events.map((e) => e.id)} strategy={verticalListSortingStrategy}>
-        <div className="relative pl-0 md:pl-4 pb-12">
+        <div className="relative pl-0 md:pl-4 pb-12 print:hidden">
           {/* Vertical line - premium gradient */}
           <div className="absolute left-[81px] md:left-[95px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-[#EDF2F7] via-[#CBD5E0] to-[#EDF2F7] -z-10 opacity-50" />
           
@@ -393,6 +393,64 @@ export function Timeline() {
           </div>
         </div>
       </SortableContext>
+      
+      {/* Tabular Print View for main Timeline */}
+      <div className="hidden print:block w-full overflow-hidden border border-[#E2E8F0] rounded-lg bg-white mt-8">
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="bg-[#F7FAFC] border-b border-[#E2E8F0]">
+              <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-[#4A5568]">Time</th>
+              <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-[#4A5568]">Event</th>
+              <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-[#4A5568]">Location</th>
+              <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-[#4A5568]">Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            {events.map((event) => {
+              const start = parseISO(event.startTime);
+              const end = addMinutes(start, event.durationMinutes);
+              const typeStyles = {
+                meeting: 'bg-[#EBF8FF] text-[#2B6CB0] border-[#BEE3F8]',
+                visit: 'bg-[#F0FFF4] text-[#2F855A] border-[#C6F6D5]',
+                guest: 'bg-[#FAF5FF] text-[#6B46C1] border-[#E9D8FD]',
+                break: 'bg-[#FFF5F5] text-[#C53030] border-[#FED7D7]',
+                unavailable: 'bg-[#EDF2F7] text-[#4A5568] border-[#E2E8F0]',
+              };
+              return (
+                <tr key={event.id} className="border-b border-[#E2E8F0] last:border-0">
+                  <td className="px-4 py-4 whitespace-nowrap align-top">
+                    <div className="text-sm font-semibold text-[#2D3748]">{format(start, "h:mm a")}</div>
+                    <div className="text-[10px] text-[#A0AEC0]">{event.durationMinutes} min</div>
+                  </td>
+                  <td className="px-4 py-4 align-top">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className={cn(
+                        "inline-block px-1.5 py-0.5 rounded text-[8px] font-bold uppercase border",
+                        typeStyles[event.type]
+                      )}>
+                        {event.type}
+                      </span>
+                    </div>
+                    <div className="text-sm font-bold text-[#1A202C]">{event.title}</div>
+                  </td>
+                  <td className="px-4 py-4 align-top text-sm text-[#4A5568]">
+                    {event.location || '-'}
+                  </td>
+                  <td className="px-4 py-4 align-top text-xs text-[#718096]">
+                    {event.attendees && event.attendees.length > 0 && (
+                      <div className="mb-1">{event.attendees.length} people</div>
+                    )}
+                    {event.description && (
+                      <div className="italic text-[#A0AEC0] line-clamp-3">{event.description}</div>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
       <DragOverlay adjustScale={false} dropAnimation={{
         sideEffects: defaultDropAnimationSideEffects({
           styles: {
