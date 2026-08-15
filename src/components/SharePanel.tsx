@@ -32,7 +32,11 @@ export function SharePanel() {
 
     // Give the browser time to remove the dialog from the DOM
     setTimeout(() => {
+      // Add tabular print class to body temporarily
+      document.body.classList.add('print-tabular');
       window.print();
+      document.body.classList.remove('print-tabular');
+      
       toast.dismiss("pdf-gen");
       toast.success("Print dialog opened");
     }, 300);
