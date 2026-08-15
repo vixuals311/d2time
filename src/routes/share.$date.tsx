@@ -50,55 +50,107 @@ function SharePage() {
             <p className="text-[#718096]">No events scheduled for this day.</p>
           </div>
         ) : (
-          <div className="space-y-6 relative pl-4 pb-12">
-            <div className="absolute left-6 top-4 bottom-4 w-[2px] bg-[#EDF2F7] -z-10" />
-            {events.map((event) => {
-              const start = parseISO(event.startTime);
-              const end = addMinutes(start, event.durationMinutes);
-              return (
-                <div key={event.id} className="relative group">
-                  <div className="flex items-center gap-4 rounded-2xl bg-white p-5 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.05)] border border-transparent transition-all">
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className={cn(
-                          "rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider border",
-                          typeStyles[event.type]
-                        )}>
-                          {event.type}
-                        </span>
-                        <div className="flex items-center gap-2 text-[11px] font-medium text-[#A0AEC0]">
-                          <Clock className="h-3 w-3" />
-                          {format(start, "h:mm a")} - {format(end, "h:mm a")}
+          <>
+            <div className="space-y-6 relative pl-4 pb-12 print:hidden">
+              <div className="absolute left-6 top-4 bottom-4 w-[2px] bg-[#EDF2F7] -z-10" />
+              {events.map((event) => {
+                const start = parseISO(event.startTime);
+                const end = addMinutes(start, event.durationMinutes);
+                return (
+                  <div key={event.id} className="relative group">
+                    <div className="flex items-center gap-4 rounded-2xl bg-white p-5 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.05)] border border-transparent transition-all">
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className={cn(
+                            "rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider border",
+                            typeStyles[event.type]
+                          )}>
+                            {event.type}
+                          </span>
+                          <div className="flex items-center gap-2 text-[11px] font-medium text-[#A0AEC0]">
+                            <Clock className="h-3 w-3" />
+                            {format(start, "h:mm a")} - {format(end, "h:mm a")}
+                          </div>
                         </div>
+                        <h3 className="font-semibold text-[#2D3748] text-lg">{event.title}</h3>
+                        {(event.location || event.attendees) && (
+                          <div className="flex gap-4 mt-3">
+                            {event.location && (
+                              <div className="flex items-center gap-1.5 text-xs text-[#718096]">
+                                <MapPin className="h-3 w-3" />
+                                {event.location}
+                              </div>
+                            )}
+                            {event.attendees && event.attendees.length > 0 && (
+                              <div className="flex items-center gap-1.5 text-xs text-[#718096]">
+                                <Users className="h-3 w-3" />
+                                {event.attendees.length} Attendees
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        {event.description && (
+                          <p className="text-xs text-[#718096] mt-3 line-clamp-2 italic border-l-2 border-[#EDF2F7] pl-3">
+                            {event.description}
+                          </p>
+                        )}
                       </div>
-                      <h3 className="font-semibold text-[#2D3748] text-lg">{event.title}</h3>
-                      {(event.location || event.attendees) && (
-                        <div className="flex gap-4 mt-3">
-                          {event.location && (
-                            <div className="flex items-center gap-1.5 text-xs text-[#718096]">
-                              <MapPin className="h-3 w-3" />
-                              {event.location}
-                            </div>
-                          )}
-                          {event.attendees && event.attendees.length > 0 && (
-                            <div className="flex items-center gap-1.5 text-xs text-[#718096]">
-                              <Users className="h-3 w-3" />
-                              {event.attendees.length} Attendees
-                            </div>
-                          )}
-                        </div>
-                      )}
-                      {event.description && (
-                        <p className="text-xs text-[#718096] mt-3 line-clamp-2 italic border-l-2 border-[#EDF2F7] pl-3">
-                          {event.description}
-                        </p>
-                      )}
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+
+            {/* Tabular Print View */}
+            <div className="hidden print:block w-full overflow-hidden border border-[#E2E8F0] rounded-lg bg-white">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-[#F7FAFC] border-b border-[#E2E8F0]">
+                    <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-[#4A5568]">Time</th>
+                    <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-[#4A5568]">Event</th>
+                    <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-[#4A5568]">Location</th>
+                    <th className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-[#4A5568]">Details</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {events.map((event) => {
+                    const start = parseISO(event.startTime);
+                    const end = addMinutes(start, event.durationMinutes);
+                    return (
+                      <tr key={event.id} className="border-b border-[#E2E8F0] last:border-0">
+                        <td className="px-4 py-4 whitespace-nowrap align-top">
+                          <div className="text-sm font-semibold text-[#2D3748]">{format(start, "h:mm a")}</div>
+                          <div className="text-[10px] text-[#A0AEC0]">{event.durationMinutes} min</div>
+                        </td>
+                        <td className="px-4 py-4 align-top">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className={cn(
+                              "inline-block px-1.5 py-0.5 rounded text-[8px] font-bold uppercase border",
+                              typeStyles[event.type]
+                            )}>
+                              {event.type}
+                            </span>
+                          </div>
+                          <div className="text-sm font-bold text-[#1A202C]">{event.title}</div>
+                        </td>
+                        <td className="px-4 py-4 align-top text-sm text-[#4A5568]">
+                          {event.location || '-'}
+                        </td>
+                        <td className="px-4 py-4 align-top text-xs text-[#718096]">
+                          {event.attendees && event.attendees.length > 0 && (
+                            <div className="mb-1">{event.attendees.length} Attendees</div>
+                          )}
+                          {event.description && (
+                            <div className="italic text-[#A0AEC0] line-clamp-3">{event.description}</div>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </div>
     </div>
