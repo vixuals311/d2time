@@ -352,20 +352,18 @@ export function Timeline() {
           })}
 
           {/* Quick Add at the bottom */}
-          <div className="flex gap-6 md:gap-8 items-center mt-4 group cursor-pointer print:hidden">
+          <div className="flex gap-6 md:gap-8 items-center mt-4 print:hidden">
              <div className="w-16 invisible" />
              <div className="relative flex-1">
                 <div className="absolute -left-[31px] md:-left-[39px] top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-[#EDF2F7] border border-[#CBD5E0]" />
-                <div className="h-10 border border-dashed border-[#E2E8F0] rounded-xl flex items-center justify-center text-[#A0AEC0] hover:text-[#718096] hover:bg-white hover:border-[#CBD5E0] transition-all relative group/inner">
-                   <AddEventModal 
-                     trigger={
-                       <button className="flex items-center justify-center w-full h-full">
-                         <Plus className="h-4 w-4 mr-2" />
-                         <span className="text-[10px] font-bold uppercase tracking-widest">Add Event</span>
-                       </button>
-                     } 
-                   />
-                </div>
+                <AddEventModal 
+                  trigger={
+                    <button className="w-full h-10 border border-dashed border-[#E2E8F0] rounded-xl flex items-center justify-center text-[#A0AEC0] hover:text-[#718096] hover:bg-white hover:border-[#CBD5E0] hover:shadow-sm transition-all cursor-pointer group">
+                      <Plus className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
+                      <span className="text-[10px] font-bold uppercase tracking-widest">Add Event</span>
+                    </button>
+                  } 
+                />
              </div>
           </div>
         </div>
