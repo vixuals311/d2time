@@ -71,11 +71,11 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
   const Icon = typeIcons[event.type] || Clock;
 
   const typeStyles = {
-    meeting: 'bg-[#EBF8FF] text-[#2B6CB0] border-[#BEE3F8]',
-    visit: 'bg-[#F0FFF4] text-[#2F855A] border-[#C6F6D5]',
-    guest: 'bg-[#FAF5FF] text-[#6B46C1] border-[#E9D8FD]',
-    break: 'bg-[#FFF5F5] text-[#C53030] border-[#FED7D7]',
-    unavailable: 'bg-[#EDF2F7] text-[#4A5568] border-[#E2E8F0]',
+    meeting: 'bg-[#EBF8FF] text-[#2B6CB0] border-[#BEE3F8] border-l-[#2B6CB0]',
+    visit: 'bg-[#F0FFF4] text-[#2F855A] border-[#C6F6D5] border-l-[#2F855A]',
+    guest: 'bg-[#FAF5FF] text-[#6B46C1] border-[#E9D8FD] border-l-[#6B46C1]',
+    break: 'bg-[#FFF5F5] text-[#C53030] border-[#FED7D7] border-l-[#C53030]',
+    unavailable: 'bg-[#EDF2F7] text-[#4A5568] border-[#E2E8F0] border-l-[#4A5568]',
   };
 
   return (
