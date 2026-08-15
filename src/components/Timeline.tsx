@@ -163,7 +163,7 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
                 </div>
               </div>
               
-              <h3 className="font-semibold text-[#1A202C] text-sm md:text-lg leading-snug truncate md:whitespace-normal">{event.title}</h3>
+              <h3 className="font-bold text-[#1A202C] text-sm md:text-xl leading-tight truncate md:whitespace-normal">{event.title}</h3>
               
               {(event.location || event.attendees) && (
                 <div className="flex flex-wrap gap-4 mt-4">
