@@ -80,20 +80,20 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
       ref={setNodeRef} 
       style={{ ...style, animationDelay: `${index * 0.1}s` }} 
       className={cn(
-        "relative mb-12 group animate-event",
-        isEventPast && "opacity-75 grayscale-[0.2]"
+        "relative mb-8 md:mb-12 group animate-event",
+        isEventPast && "opacity-60 grayscale-[0.5]"
       )}
     >
-      <div className="flex gap-6 md:gap-8">
+      <div className="flex gap-4 md:gap-8">
         {/* Time Column */}
-        <div className="w-16 pt-1 text-right flex-shrink-0">
+        <div className="w-12 md:w-16 pt-1 text-right flex-shrink-0">
           <div className={cn(
-            "text-xs font-bold tracking-tight",
+            "text-[10px] md:text-xs font-bold tracking-tight",
             isEventPast ? "text-[#A0AEC0]" : "text-[#2D3748]"
           )}>
             {format(startTime, "h:mm")}
           </div>
-          <div className="text-[10px] text-[#A0AEC0] font-medium uppercase tracking-tighter">
+          <div className="text-[8px] md:text-[10px] text-[#A0AEC0] font-medium uppercase tracking-tighter">
             {format(startTime, "a")}
           </div>
         </div>
@@ -102,13 +102,13 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
         <div className="relative flex-1">
           {/* Connector Dot */}
           <div className={cn(
-            "absolute -left-[33px] md:-left-[41px] top-3 h-3 w-3 rounded-full border-2 bg-white z-10 transition-transform group-hover:scale-125",
+            "absolute -left-[27px] md:-left-[41px] top-3 h-2.5 w-2.5 md:h-3 md:w-3 rounded-full border-2 bg-white z-10 transition-transform group-hover:scale-125",
             isEventPast ? "border-[#CBD5E0]" : "border-[#2D3748] shadow-[0_0_0_4px_rgba(45,55,72,0.1)]"
           )} />
 
           <div
             className={cn(
-              "relative flex items-center gap-4 rounded-2xl bg-white p-5 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.05)] border border-transparent hover:border-[#E2E8F0] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)] transition-all",
+              "relative flex items-center gap-3 md:gap-4 rounded-xl md:rounded-2xl bg-white p-3 md:p-5 shadow-[0_2px_12px_-2px_rgba(0,0,0,0.04)] md:shadow-[0_4px_20px_-2px_rgba(0,0,0,0.05)] border border-transparent hover:border-[#E2E8F0] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)] transition-all",
               isDragging && "opacity-50"
             )}
           >
@@ -121,13 +121,13 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
             </button>
 
             <div className="flex-1">
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between mb-1.5 md:mb-2">
                 <div className="flex items-center gap-2">
                   <span className={cn(
-                    "rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider border flex items-center gap-1",
+                    "rounded-full px-2 md:px-2.5 py-0.5 text-[8px] md:text-[10px] font-bold uppercase tracking-wider border flex items-center gap-1",
                     typeStyles[event.type]
                   )}>
-                    <Icon className="h-3 w-3" />
+                    <Icon className="h-2.5 w-2.5 md:h-3 md:w-3" />
                     {event.type}
                   </span>
                 </div>
@@ -137,7 +137,7 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
                 </div>
               </div>
               
-              <h3 className="font-semibold text-[#1A202C] text-lg leading-snug">{event.title}</h3>
+              <h3 className="font-semibold text-[#1A202C] text-sm md:text-lg leading-snug truncate md:whitespace-normal">{event.title}</h3>
               
               {(event.location || event.attendees) && (
                 <div className="flex flex-wrap gap-4 mt-3">
@@ -157,17 +157,17 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
               )}
             </div>
 
-            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all print:hidden">
+            <div className="flex items-center gap-0.5 md:gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-all print:hidden">
               <button
                 onClick={() => {
                   const fmt = (d: Date) => format(d, "yyyyMMdd'T'HHmmss'Z'");
                   const gCalUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${fmt(startTime)}/${fmt(endTime)}&details=${encodeURIComponent(event.description || '')}&location=${encodeURIComponent(event.location || '')}`;
                   window.open(gCalUrl, '_blank');
                 }}
-                className="p-2 text-[#718096] hover:bg-[#F7FAFC] rounded-lg transition-all"
+                className="p-1.5 md:p-2 text-[#718096] hover:bg-[#F7FAFC] rounded-lg transition-all"
                 title="Add to Google Calendar"
               >
-                <Calendar className="h-4 w-4" />
+                <Calendar className="h-3.5 w-3.5 md:h-4 md:w-4" />
               </button>
 
               <button
@@ -180,8 +180,8 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="p-2 text-[#718096] hover:bg-[#F7FAFC] rounded-lg transition-all">
-                    <Share2 className="h-4 w-4" />
+                  <button className="p-1.5 md:p-2 text-[#718096] hover:bg-[#F7FAFC] rounded-lg transition-all">
+                    <Share2 className="h-3.5 w-3.5 md:h-4 md:w-4" />
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -208,17 +208,17 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
                   removeEvent(event.id);
                   toast.info("Event removed");
                 }}
-                className="p-2 text-[#FC8181] hover:bg-[#FFF5F5] rounded-lg transition-all"
+                className="p-1.5 md:p-2 text-[#FC8181] hover:bg-[#FFF5F5] rounded-lg transition-all"
               >
-                <Trash2 className="h-4 w-4" />
+                <Trash2 className="h-3.5 w-3.5 md:h-4 md:w-4" />
               </button>
             </div>
           </div>
 
           {/* Buffer Indicator */}
-          <div className="absolute -bottom-8 left-6 right-0 flex items-center gap-3 print:hidden">
+          <div className="absolute -bottom-6 md:-bottom-8 left-4 md:left-6 right-0 flex items-center gap-2 md:gap-3 print:hidden">
             <div className="h-[1px] flex-1 bg-dashed border-t border-dashed border-[#E2E8F0]" />
-            <span className="text-[9px] font-bold text-[#CBD5E0] uppercase tracking-[0.2em] whitespace-nowrap">
+            <span className="text-[8px] md:text-[9px] font-bold text-[#CBD5E0] uppercase tracking-[0.1em] md:tracking-[0.2em] whitespace-nowrap">
               {bufferMinutes}m buffer
             </span>
             <div className="h-[1px] flex-1 bg-dashed border-t border-dashed border-[#E2E8F0]" />
@@ -330,7 +330,7 @@ export function Timeline() {
       <SortableContext items={events.map((e) => e.id)} strategy={verticalListSortingStrategy}>
         <div className="relative pl-0 md:pl-4 pb-12">
           {/* Vertical line - responsive offset */}
-          <div className="absolute left-[87px] md:left-[95px] top-4 bottom-4 w-[2px] bg-[#EDF2F7] -z-10" />
+          <div className="absolute left-[81px] md:left-[95px] top-4 bottom-4 w-[2px] bg-[#EDF2F7] -z-10" />
           
           {events.map((event, index) => {
             const startTime = new Date(event.startTime);
@@ -341,8 +341,8 @@ export function Timeline() {
               <div key={event.id} className="relative">
                 {isNow && (
                   <div className="absolute left-0 right-0 -top-6 flex items-center gap-3 z-20 print:hidden animate-pulse">
-                     <div className="w-16 text-right text-[10px] font-bold text-[#E53E3E] uppercase tracking-tighter">Now</div>
-                     <div className="h-2 w-2 rounded-full bg-[#E53E3E]" />
+                     <div className="w-12 md:w-16 text-right text-[8px] md:text-[10px] font-bold text-[#E53E3E] uppercase tracking-tighter">Now</div>
+                     <div className="h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-[#E53E3E]" />
                      <div className="h-[1px] flex-1 bg-[#E53E3E]" />
                   </div>
                 )}
@@ -352,10 +352,10 @@ export function Timeline() {
           })}
 
           {/* Quick Add at the bottom */}
-          <div className="flex gap-6 md:gap-8 items-center mt-4 print:hidden">
-             <div className="w-16 invisible" />
+          <div className="flex gap-4 md:gap-8 items-center mt-4 print:hidden">
+             <div className="w-12 md:w-16 invisible" />
              <div className="relative flex-1">
-                <div className="absolute -left-[31px] md:-left-[39px] top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-[#EDF2F7] border border-[#CBD5E0]" />
+                <div className="absolute -left-[25px] md:-left-[39px] top-1/2 -translate-y-1/2 h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-[#EDF2F7] border border-[#CBD5E0]" />
                 <AddEventModal 
                   trigger={
                     <button className="w-full h-10 border border-dashed border-[#E2E8F0] rounded-xl flex items-center justify-center text-[#A0AEC0] hover:text-[#718096] hover:bg-white hover:border-[#CBD5E0] hover:shadow-sm transition-all cursor-pointer group">

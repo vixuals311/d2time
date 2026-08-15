@@ -31,7 +31,14 @@ export function Settings() {
   const [localDurations, setLocalDurations] = useState(durationOptions);
   const [newDuration, setNewDuration] = useState("");
 
+  const hasChanges = 
+    localBuffer !== bufferMinutes || 
+    localWorkingHours.start !== workingHours.start || 
+    localWorkingHours.end !== workingHours.end || 
+    JSON.stringify(localDurations.sort()) !== JSON.stringify([...durationOptions].sort());
+
   const handleSave = () => {
+    if (!hasChanges) return;
     setBufferMinutes(localBuffer);
     setWorkingHours(localWorkingHours);
     setDurationOptions([...localDurations].sort((a, b) => a - b));
@@ -152,7 +159,8 @@ export function Settings() {
         <DialogFooter>
           <button 
             onClick={handleSave}
-            className="w-full bg-[#2D3748] text-white py-2 rounded-xl font-medium hover:bg-[#1A202C] transition-all shadow-sm"
+            disabled={!hasChanges}
+            className="w-full bg-[#2D3748] text-white py-2 rounded-xl font-medium hover:bg-[#1A202C] transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#2D3748]"
           >
             Save Changes
           </button>
