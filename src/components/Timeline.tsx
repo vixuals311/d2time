@@ -164,7 +164,7 @@ function SortableEventItem({ event, bufferMinutes, index }: SortableEventItemPro
               <button
                 onClick={() => {
                   const fmt = (d: Date) => format(d, "yyyyMMdd'T'HHmmss'Z'");
-                  const gCalUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${fmt(startTime)}/${fmt(endTime)}&details=${encodeURIComponent(event.description || '')}&location=${encodeURIComponent(event.location || '')}`;
+                  const gCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${fmt(startTime)}/${fmt(endTime)}${event.location ? `&location=${encodeURIComponent(event.location)}` : ''}`;
                   window.open(gCalUrl, '_blank');
                 }}
                 className="p-1.5 md:p-2 text-[#718096] hover:bg-[#F7FAFC] rounded-lg transition-all"

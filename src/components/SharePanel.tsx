@@ -17,7 +17,7 @@ export function SharePanel() {
 
   const copyLink = () => {
     const url = new URL(window.location.origin);
-    url.pathname = `/share/${selectedDate}`;
+    url.pathname = `/share/${encodeURIComponent(selectedDate)}`;
     navigator.clipboard.writeText(url.toString());
     setCopied(true);
     toast.success("Shareable link copied");
