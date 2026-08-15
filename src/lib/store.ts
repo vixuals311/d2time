@@ -62,7 +62,18 @@ export const useTimelineStore = create<TimelineState>()(
         let success = true;
         set((state) => {
           const newEvent = { ...event, id: crypto.randomUUID() };
-          const hasClash = checkClash(newEvent, state.events);
+          
+          // Check for clashes INCLUDING buffer
+          const hasClash = state.events.some((e) => {
+            const eStart = parseISO(e.startTime);
+            const eEnd = addMinutes(eStart, e.durationMinutes + state.bufferMinutes);
+            
+            const newStart = parseISO(newEvent.startTime);
+            const newEnd = addMinutes(newStart, newEvent.durationMinutes + state.bufferMinutes);
+            
+            return isBefore(newStart, eEnd) && isAfter(newEnd, eStart);
+          });
+
           if (hasClash) {
             success = false;
             return state;
