@@ -39,13 +39,16 @@ interface TimelineState {
   events: TimelineEvent[];
   bufferMinutes: number;
   workingHours: WorkingHours;
+  durationOptions: number[];
   addEvent: (event: Omit<TimelineEvent, 'id'>) => boolean;
   updateEvent: (id: string, updates: Partial<TimelineEvent>) => boolean;
   removeEvent: (id: string) => void;
   setBufferMinutes: (minutes: number) => void;
   setEvents: (events: TimelineEvent[]) => void;
   setWorkingHours: (hours: WorkingHours) => void;
+  setDurationOptions: (options: number[]) => void;
 }
+
 
 export const useTimelineStore = create<TimelineState>()(
   persist(
@@ -53,6 +56,8 @@ export const useTimelineStore = create<TimelineState>()(
       events: [],
       bufferMinutes: 15,
       workingHours: { start: '09:00', end: '18:00' },
+      durationOptions: [15, 30, 60, 120],
+
       addEvent: (event) => {
         let success = true;
         set((state) => {
@@ -96,6 +101,8 @@ export const useTimelineStore = create<TimelineState>()(
       setBufferMinutes: (minutes) => set({ bufferMinutes: minutes }),
       setEvents: (events) => set({ events }),
       setWorkingHours: (hours) => set({ workingHours: hours }),
+      setDurationOptions: (options) => set({ durationOptions: options }),
+
     }),
     {
       name: 'timeline-storage',
