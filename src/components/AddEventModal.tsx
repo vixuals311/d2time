@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
+import { parse } from "date-fns";
 import {
   Dialog,
   DialogContent,
@@ -25,6 +26,7 @@ export function AddEventModal() {
   const [open, setOpen] = useState(false);
   const addEvent = useTimelineStore((state) => state.addEvent);
   const bufferMinutes = useTimelineStore((state) => state.bufferMinutes);
+  const workingHours = useTimelineStore((state) => state.workingHours);
 
   const [formData, setFormData] = useState<{
     title: string;
@@ -44,6 +46,17 @@ export function AddEventModal() {
     e.preventDefault();
     if (!formData.title) {
       toast.error("Please enter a title");
+      return;
+    }
+
+    const eventStart = new Date(formData.startTime);
+    const eventEnd = new Date(eventStart.getTime() + formData.durationMinutes * 60000);
+    const baseDate = format(eventStart, "yyyy-MM-dd");
+    const dayStart = parse(`${baseDate} ${workingHours.start}`, "yyyy-MM-dd HH:mm", new Date());
+    const dayEnd = parse(`${baseDate} ${workingHours.end}`, "yyyy-MM-dd HH:mm", new Date());
+
+    if (eventStart < dayStart || eventEnd > dayEnd) {
+      toast.error(`Event must be within working hours (${workingHours.start} - ${workingHours.end})`);
       return;
     }
 

@@ -15,7 +15,7 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { format, addMinutes, parseISO } from 'date-fns';
+import { format, addMinutes, parseISO, parse } from 'date-fns';
 import { GripVertical, Clock, MapPin, Users, Trash2, Share2, Copy, Calendar } from 'lucide-react';
 import { useTimelineStore, TimelineEvent } from '../lib/store';
 import { cn } from '../lib/utils';
@@ -170,7 +170,7 @@ function SortableEventItem({ event, bufferMinutes }: SortableEventItemProps) {
 }
 
 export function Timeline() {
-  const { events, bufferMinutes, setEvents } = useTimelineStore();
+  const { events, bufferMinutes, setEvents, workingHours } = useTimelineStore();
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -197,6 +197,21 @@ export function Timeline() {
         currentTime = addMinutes(start, e.durationMinutes);
         return updated;
       });
+
+      // Check if the new sequence clashes (it shouldn't logically overlap itself, 
+      // but we might want to check against working hours)
+      const baseDate = format(new Date(firstEvent.startTime), "yyyy-MM-dd");
+      const dayStart = parse(`${baseDate} ${workingHours.start}`, "yyyy-MM-dd HH:mm", new Date());
+      const dayEnd = parse(`${baseDate} ${workingHours.end}`, "yyyy-MM-dd HH:mm", new Date());
+
+      const firstStart = new Date(updatedEvents[0].startTime);
+      const lastEvent = updatedEvents[updatedEvents.length - 1];
+      const lastEnd = addMinutes(new Date(lastEvent.startTime), lastEvent.durationMinutes);
+
+      if (firstStart < dayStart || lastEnd > dayEnd) {
+        toast.error("Schedule exceeds working hours!");
+        return;
+      }
 
       setEvents(updatedEvents);
       toast.success("Schedule reordered");
