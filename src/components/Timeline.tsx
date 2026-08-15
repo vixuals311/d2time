@@ -274,7 +274,7 @@ export function Timeline() {
       onDragEnd={handleDragEnd}
     >
       <SortableContext items={events.map((e) => e.id)} strategy={verticalListSortingStrategy}>
-        <div className="relative pl-4">
+        <div className="relative pl-4 pb-12">
           {/* Vertical line */}
           <div className="absolute left-6 top-4 bottom-4 w-[2px] bg-[#EDF2F7] -z-10" />
           
