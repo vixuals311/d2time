@@ -14,8 +14,12 @@
   .print-hidden,
   [class*="toaster"],
   [class*="toast"],
-  .sonner-toaster {
+  .sonner-toaster,
+  [data-sonner-toaster] {
     display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
 }
 
