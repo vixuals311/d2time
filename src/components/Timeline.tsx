@@ -378,9 +378,9 @@ export function Timeline() {
 
           {/* Quick Add at the bottom */}
           <div className="flex gap-4 md:gap-8 items-center mt-4 print:hidden">
-             <div className="w-24 md:w-28 invisible" />
+             <div className="w-12 md:w-16 invisible" />
              <div className="relative flex-1">
-                <div className="absolute -left-[37px] md:-left-[51px] top-1/2 -translate-y-1/2 h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-[#EDF2F7] border border-[#CBD5E0]" />
+                <div className="absolute -left-[15px] md:-left-[24px] top-1/2 -translate-y-1/2 h-1 w-1 md:h-1.5 md:w-1.5 rounded-full bg-[#EDF2F7] border border-[#CBD5E0]" />
                 <AddEventModal 
                   trigger={
                     <button className="w-full h-14 border-2 border-dashed border-[#EDF2F7] rounded-[1.5rem] flex items-center justify-center text-[#A0AEC0] hover:text-[#2D3748] hover:bg-white hover:border-[#CBD5E0] hover:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] transition-all duration-300 cursor-pointer group">
