@@ -10,9 +10,9 @@ export const Route = createFileRoute('/share/$date')({
 
 function SharePage() {
   const { date } = Route.useParams();
-  const events = useTimelineStore((state) => 
-    state.events.filter(e => startOfDay(parseISO(e.startTime)).toISOString() === date)
-  );
+  const { events: allEvents, profile } = useTimelineStore();
+  
+  const events = allEvents.filter(e => startOfDay(parseISO(e.startTime)).toISOString() === date);
 
   const typeStyles = {
     meeting: 'bg-[#EBF8FF] text-[#3182CE] border-[#BEE3F8]',
@@ -32,8 +32,17 @@ function SharePage() {
             </div>
             <span className="text-xs font-bold uppercase tracking-widest text-[#A0AEC0]">Schedule Shared</span>
           </div>
-          <h1 className="text-3xl font-serif font-medium text-[#1A202C] tracking-tight">Daily Timeline</h1>
-          <p className="text-[#718096] text-lg mt-1">{format(parseISO(date), "EEEE, MMMM do, yyyy")}</p>
+          <h1 className="text-3xl font-serif font-medium text-[#1A202C] tracking-tight">
+            {profile.name ? `${profile.name}'s Schedule` : 'Daily Timeline'}
+          </h1>
+          <div className="flex items-center justify-between mt-1">
+            <p className="text-[#718096] text-lg">{format(parseISO(date), "EEEE, MMMM do, yyyy")}</p>
+            {profile.position && (
+              <span className="text-[10px] font-bold uppercase tracking-widest text-[#A0AEC0]">
+                {profile.position} {profile.company ? `@ ${profile.company}` : ''}
+              </span>
+            )}
+          </div>
         </header>
 
         {events.length === 0 ? (
@@ -71,7 +80,18 @@ function SharePage() {
                               {event.location}
                             </div>
                           )}
+                          {event.attendees && event.attendees.length > 0 && (
+                            <div className="flex items-center gap-1.5 text-xs text-[#718096]">
+                              <Users className="h-3 w-3" />
+                              {event.attendees.length} Attendees
+                            </div>
+                          )}
                         </div>
+                      )}
+                      {event.description && (
+                        <p className="text-xs text-[#718096] mt-3 line-clamp-2 italic border-l-2 border-[#EDF2F7] pl-3">
+                          {event.description}
+                        </p>
                       )}
                     </div>
                   </div>
