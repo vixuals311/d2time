@@ -34,10 +34,12 @@ function Index() {
             </div>
             <span className="text-xs font-bold uppercase tracking-widest text-[#A0AEC0]">PA Assistant</span>
           </div>
-          <h1 className="text-4xl font-serif font-medium text-[#1A202C] tracking-tight">Timeline</h1>
+          <h1 className="text-4xl font-serif font-medium text-[#1A202C] tracking-tight print:hidden">Timeline</h1>
+          <h1 className="hidden print:block text-4xl font-serif font-medium text-[#1A202C] tracking-tight">Executive Schedule</h1>
+
           <div className="flex items-center gap-3 mt-1">
             <p className="text-[#718096] text-lg">{format(currentSelectedDate, "EEEE, MMMM do")}</p>
-            <div className="flex items-center bg-white border border-[#EDF2F7] rounded-lg shadow-sm px-1 py-0.5">
+            <div className="flex items-center bg-white border border-[#EDF2F7] rounded-lg shadow-sm px-1 py-0.5 print:hidden">
               <button 
                 onClick={handlePrevDay}
                 className="p-1 hover:bg-[#F7FAFC] rounded transition-colors text-[#718096]"
@@ -59,21 +61,23 @@ function Index() {
                 <ChevronRight className="h-4 w-4" />
               </button>
             </div>
+
           </div>
         </div>
         
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 print:hidden">
           <SharePanel />
           <AddEventModal />
           <Settings />
         </div>
+
       </header>
 
       <main className="mx-auto max-w-3xl">
         <Timeline />
       </main>
 
-      <footer className="mx-auto max-w-3xl mt-20 pt-8 border-t border-[#EDF2F7] flex justify-between items-center text-[11px] font-medium text-[#A0AEC0] uppercase tracking-widest">
+      <footer className="mx-auto max-w-3xl mt-20 pt-8 border-t border-[#EDF2F7] flex justify-between items-center text-[11px] font-medium text-[#A0AEC0] uppercase tracking-widest print:hidden">
         <span>&copy; 2026 Executive PA Suite</span>
         <div className="flex gap-6">
           <button className="hover:text-[#4A5568] transition-colors">Privacy</button>
