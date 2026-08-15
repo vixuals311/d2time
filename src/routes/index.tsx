@@ -4,6 +4,7 @@ import { useTimelineStore } from "../lib/store";
 import { format } from "date-fns";
 import { Timeline } from "../components/Timeline";
 import { AddEventModal } from "../components/AddEventModal";
+import { SharePanel } from "../components/SharePanel";
 import { Toaster } from "sonner";
 
 export const Route = createFileRoute("/")({
@@ -30,9 +31,7 @@ function Index() {
         </div>
         
         <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 rounded-2xl bg-white px-5 py-2.5 text-sm font-semibold text-[#4A5568] shadow-[0_2px_10px_-2px_rgba(0,0,0,0.05)] border border-[#EDF2F7] hover:bg-[#F7FAFC] transition-all">
-            <Share2 className="h-4 w-4" /> Share Schedule
-          </button>
+          <SharePanel />
           <AddEventModal />
         </div>
       </header>
