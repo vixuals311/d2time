@@ -23,7 +23,7 @@ function Index() {
   const handleToday = () => setSelectedDate(new Date());
 
   return (
-    <div className="min-h-screen bg-[#F8F9FB] px-6 py-8 md:p-12 font-sans selection:bg-[#EBF8FF]">
+    <div className="min-h-screen bg-[#F8F9FB] px-6 py-8 md:px-12 md:py-12 font-sans selection:bg-[#EBF8FF]">
       <Toaster position="top-center" richColors />
       
       <header className="mx-auto max-w-3xl mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
