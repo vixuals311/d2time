@@ -48,8 +48,8 @@ export function SharePanel() {
       if (val) toast.dismiss("pdf-gen");
     }}>
       <DialogTrigger asChild>
-        <button className="flex items-center gap-2 rounded-2xl bg-white px-5 py-2.5 text-sm font-semibold text-[#4A5568] shadow-[0_2px_10px_-2px_rgba(0,0,0,0.05)] border border-[#EDF2F7] hover:bg-[#F7FAFC] transition-all">
-          <Share2 className="h-4 w-4" /> Share Schedule
+        <button className="flex w-full md:w-auto items-center justify-center gap-2 rounded-2xl bg-white px-4 md:px-5 py-2.5 text-sm font-semibold text-[#4A5568] shadow-[0_2px_10px_-2px_rgba(0,0,0,0.05)] border border-[#EDF2F7] hover:bg-[#F7FAFC] transition-all">
+          <Share2 className="h-4 w-4" /> <span className="md:inline">Share</span>
         </button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
