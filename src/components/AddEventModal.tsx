@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
-import { parse } from "date-fns";
+import { parse, format, isBefore, isAfter } from "date-fns";
 import {
   Dialog,
   DialogContent,
@@ -20,7 +20,7 @@ import {
 } from "./ui/select";
 import { useTimelineStore, EventType } from "../lib/store";
 import { toast } from "sonner";
-import { format } from "date-fns";
+import DatePicker from "react-datepicker";
 
 export function AddEventModal() {
   const [open, setOpen] = useState(false);
@@ -30,13 +30,13 @@ export function AddEventModal() {
 
   const [formData, setFormData] = useState<{
     title: string;
-    startTime: string;
+    startDate: Date;
     durationMinutes: number;
     type: EventType;
     location: string;
   }>({
     title: "",
-    startTime: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
+    startDate: new Date(),
     durationMinutes: 30,
     type: "meeting",
     location: "",
@@ -49,8 +49,9 @@ export function AddEventModal() {
       return;
     }
 
-    const eventStart = new Date(formData.startTime);
+    const eventStart = formData.startDate;
     const eventEnd = new Date(eventStart.getTime() + formData.durationMinutes * 60000);
+    
     const baseDate = format(eventStart, "yyyy-MM-dd");
     const dayStart = parse(`${baseDate} ${workingHours.start}`, "yyyy-MM-dd HH:mm", new Date());
     const dayEnd = parse(`${baseDate} ${workingHours.end}`, "yyyy-MM-dd HH:mm", new Date());
@@ -61,8 +62,11 @@ export function AddEventModal() {
     }
 
     const success = addEvent({
-      ...formData,
+      title: formData.title,
+      startTime: eventStart.toISOString(),
       durationMinutes: Number(formData.durationMinutes),
+      type: formData.type,
+      location: formData.location,
     });
 
     if (success) {
@@ -70,7 +74,7 @@ export function AddEventModal() {
       setOpen(false);
       setFormData({
         title: "",
-        startTime: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
+        startDate: new Date(),
         durationMinutes: 30,
         type: "meeting",
         location: "",
@@ -78,6 +82,16 @@ export function AddEventModal() {
     } else {
       toast.error("Time clash detected! Please choose a different time.");
     }
+  };
+
+  const filterPassedTime = (time: Date) => {
+    const baseDate = format(formData.startDate, "yyyy-MM-dd");
+    const dayStart = parse(`${baseDate} ${workingHours.start}`, "yyyy-MM-dd HH:mm", new Date());
+    const dayEnd = parse(`${baseDate} ${workingHours.end}`, "yyyy-MM-dd HH:mm", new Date());
+    
+    // Allow the start and end times to be selectable
+    return (isAfter(time, dayStart) || time.getTime() === dayStart.getTime()) && 
+           (isBefore(time, dayEnd) || time.getTime() === dayEnd.getTime());
   };
 
   return (
@@ -107,15 +121,22 @@ export function AddEventModal() {
             <div className="grid gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="startTime">Start Time</Label>
-                <Input
-                  id="startTime"
-                  type="datetime-local"
-                  value={formData.startTime}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, startTime: e.target.value }))
-                  }
-                  className="w-full"
-                />
+                <div className="relative">
+                  <DatePicker
+                    selected={formData.startDate}
+                    onChange={(date: Date | null) => date && setFormData(prev => ({ ...prev, startDate: date }))}
+                    showTimeSelect
+                    timeFormat="HH:mm"
+                    timeIntervals={15}
+                    timeCaption="time"
+                    dateFormat="MMMM d, yyyy h:mm aa"
+                    filterTime={filterPassedTime}
+                    className="flex h-10 w-full rounded-xl border border-input bg-background px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm transition-all"
+                  />
+                </div>
+                <p className="text-[10px] text-muted-foreground">
+                  * Only hours between {workingHours.start} and {workingHours.end} are selectable.
+                </p>
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="duration">Duration (min)</Label>
